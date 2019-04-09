@@ -38,10 +38,15 @@ def init_db():
         db.commit()
 
 def create_user(email, password, role):
-    print(email, password, role)
-    # get values of user somehow
+    db = get_db()
+    cur = db.cursor()
 
-    # commit those values to the database, update the database, and close it.
+    # commit the values in params to the database, update the database, and close it.
+    cur.execute("INSERT INTO users (email, password, role) VALUES (%s, %s, %s)", (email, password, role))
+    db.commit()
+    cur.close()
+    db.close()
+
 
 @click.command('init-db')
 @with_appcontext
