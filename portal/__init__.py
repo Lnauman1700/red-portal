@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from . import db
 
 
 def create_app(test_config=None):
@@ -18,9 +19,12 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    @app.route('/')
+    @app.route('/', methods = ['GET', 'POST'])
     def index():
         return render_template('index.html')
 
-    return app
+    @app.route('/home')
+    def home():
+        return render_template('home.html', user=user)
 
+    return app
