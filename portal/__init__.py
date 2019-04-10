@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
+
 
 
 def create_app(test_config=None):
@@ -34,17 +35,19 @@ def create_app(test_config=None):
                 user = cur.fetchone()
 
                 if user is None:
-                    return render_template('index.html')
+                    return redirect(url_for('index'))
                 elif password == user[2]:
                     # store user info in a session
-                    return render_template('home.html')
+
+                    # utilize hashes and compare hashed password to password in DB
+                    return redirect(url_for('home'))
                 else:
-                    return render_template('index.html')
+                    return redirect(url_for('index'))
         else:
             return render_template('index.html')
 
     @app.route('/home')
     def home():
-        return render_template('home.html', user=user)
+        return render_template('home.html')
 
     return app
