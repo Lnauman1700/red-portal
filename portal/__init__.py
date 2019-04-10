@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def create_app(test_config=None):
@@ -25,6 +25,7 @@ def create_app(test_config=None):
 
             email  = request.form['email']
             password  = request.form['password']
+            print(password)
 
             if email is None or password is None:
                 return render_template('index.html')
@@ -36,7 +37,7 @@ def create_app(test_config=None):
 
                 if user is None:
                     return redirect(url_for('index'))
-                elif password == user[2]:
+                elif check_password_hash(user[2], password):
                     # store user info in a session
 
                     # utilize hashes and compare hashed password to password in DB
