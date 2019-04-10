@@ -25,16 +25,21 @@ def create_app(test_config=None):
             email  = request.form['email']
             password  = request.form['password']
 
-            dab = db.get_db()
-            cur = dab.cursor()
-            cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
-            user = cur.fetchone()
-
-            if password == user[2]:
-                # store user info in a session
-                return render_template('home.html')
-            else:
+            if email is None or password is None:
                 return render_template('index.html')
+            else:
+                dab = db.get_db()
+                cur = dab.cursor()
+                cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+                user = cur.fetchone()
+
+                if user is None:
+                    return render_template('index.html')
+                elif password == user[2]:
+                    # store user info in a session
+                    return render_template('home.html')
+                else:
+                    return render_template('index.html')
         else:
             return render_template('index.html')
 
