@@ -25,6 +25,8 @@ def create_app(test_config=None):
 
     @app.route('/home')
     def home():
-        return render_template('home.html', user=user)
+        return render_template('home.html')
+        # The code bellow is what was there before I changed it so I could look at the page.
+        # return render_template('home.html', user=user)
 
     return app
