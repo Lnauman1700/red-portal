@@ -4,7 +4,7 @@ import psycopg2
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
-
+from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_db():
     if 'db' not in g:
@@ -36,7 +36,18 @@ def init_db():
         cur.execute(f.read())
         cur.close()
         db.commit()
-        
+
+def create_user(email, hash, role):
+    db = get_db()
+    cur = db.cursor()
+
+    # commit the values in params to the database, update the database, and close it.
+    cur.execute("INSERT INTO users (email, password, role) VALUES (%s, %s, %s)", (email, hash, role))
+
+    db.commit()
+    cur.close()
+    db.close()
+
 
 @click.command('init-db')
 @with_appcontext
@@ -45,8 +56,18 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+@click.command('create-user')
+@with_appcontext
+@click.option('--email', prompt='Email')
+@click.option('--password', prompt='Password')
+@click.option('--role', prompt='Role')
+def create_user_command(email, password, role):
+    """Create new User"""
+    create_user(email, generate_password_hash(password), role)
+    click.echo(f'Created new user. Email: {email} Password: {password} Role: {role}')
+
 
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
-
+    app.cli.add_command(create_user_command)
