@@ -1,5 +1,4 @@
-from flask import Flask, render_template
-from . import db
+from flask import Flask, render_template, request
 
 
 def create_app(test_config=None):
@@ -21,7 +20,23 @@ def create_app(test_config=None):
 
     @app.route('/', methods = ['GET', 'POST'])
     def index():
-        return render_template('index.html')
+        if request.method == 'POST':
+
+            email  = request.form['email']
+            password  = request.form['password']
+
+            dab = db.get_db()
+            cur = dab.cursor()
+            cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+            user = cur.fetchone()
+
+            if password == user[2]:
+                # store user info in a session
+                return render_template('home.html')
+            else:
+                return render_template('index.html')
+        else:
+            return render_template('index.html')
 
     @app.route('/home')
     def home():

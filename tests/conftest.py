@@ -41,8 +41,8 @@ def runner(app):
 class AuthActions(object):
     def __init__(self, client):
         self._client = client
-#----
-    def login(self, email, password):
+
+    def login(self, email='test', password='test'):
         return self._client.post(
             '/',
             data={'email': email, 'password': password}
