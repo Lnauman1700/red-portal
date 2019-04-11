@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, g
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -19,36 +19,12 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    @app.route('/', methods = ['GET', 'POST'])
-    def index():
-        if request.method == 'POST':
-
-            email  = request.form['email']
-            password  = request.form['password']
-            print(password)
-
-            if email is None or password is None:
-                return render_template('index.html')
-            else:
-                dab = db.get_db()
-                cur = dab.cursor()
-                cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
-                user = cur.fetchone()
-
-                if user is None:
-                    return redirect(url_for('index'))
-                elif check_password_hash(user[2], password):
-                    # store user info in a session
-
-                    # utilize hashes and compare hashed password to password in DB
-                    return redirect(url_for('home'))
-                else:
-                    return redirect(url_for('index'))
-        else:
-            return render_template('index.html')
+    from . import auth
+    app.register_blueprint(auth.bp)
+    app.add_url_rule('/', endpoint='index')
 
     @app.route('/home')
     def home():
-        return render_template('home.html')
+        return render_template('home.html', user=g.user[1])
 
     return app
