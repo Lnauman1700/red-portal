@@ -22,5 +22,10 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
+    @app.route('/courses')
+    def courses():
+        return render_template('courses.html')
+
+
     return app
 
