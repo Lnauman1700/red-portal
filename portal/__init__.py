@@ -27,4 +27,5 @@ def create_app(test_config=None):
     def home():
         return render_template('home.html', user=g.user[1])
 
+
     return app
