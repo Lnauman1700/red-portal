@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 
 def create_app(test_config=None):
@@ -22,9 +22,13 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
-    @app.route('/courses')
+    @app.route('/courses', methods=['GET', 'POST'])
     def courses():
+        sub = request.form['Submit']
+        if sub:
+            print(request.method)
         return render_template('courses.html')
+
 
 
     return app

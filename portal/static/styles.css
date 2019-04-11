@@ -60,3 +60,7 @@ label {
 label input {
   width: 100%;
 }
+
+.course-info {
+  height: 100px;
+}

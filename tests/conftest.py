@@ -13,10 +13,6 @@ def app():
         'DB_NAME': 'portal_test',
         'DB_USER': 'portal_user',
     })
-
-    print('='*10)
-    for r in app.url_map.iter_rules():
-        print(r)
         
     with app.app_context():
         init_db()
