@@ -10,12 +10,30 @@
 html {
   font-family: 'Lato', Helvetica, Arial, sans-serif;
   font-size: 18px;
+  background-color: #fafafa;
+  margin: 0;
+}
+.header{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+.header h1 {
+  font-family: serif;
+  font-weight: 400;
+  background-color: rgb(128, 40, 65);
+  color: #fafafa;
+  width: 100%;
+  margin: 0;
+  padding: 1em 0 1em .5em;
+  font-family: 'Libre Baskerville', serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Crimson Text', serif;
-  font-weight: 400;
-  color: red;
+.header img {
+  margin-top: 1em;
+  height: 100px;
+  width: 100px;
 }
 
 
@@ -27,7 +45,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
 @media (min-width: 760px) {
