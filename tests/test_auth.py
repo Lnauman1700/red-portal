@@ -12,7 +12,7 @@ def test_login_logout(client, auth):
     with client:
         response = auth.login()
         assert response.headers['Location'] == 'http://localhost/'
-        assert session['user_id'] == None
+        assert 'user_id' not in session
         assert g.user == None
 
     # assert that correct login works
@@ -29,6 +29,6 @@ def test_login_logout(client, auth):
         response = client.get('/home')
         response = client.get('/logout')
         assert response.headers['Location'] == 'http://localhost/'
-        assert session['user_id'] == None
+        assert 'user_id' not in session
         client.get('/')
         assert g.user == None
