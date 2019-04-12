@@ -16,27 +16,47 @@ html {
 .header{
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: space-around;
+
 }
 .header h1 {
-  font-family: serif;
+  font-family: 'Crimson Text', serif;
   font-weight: 400;
   background-color: rgb(128, 40, 65);
   color: #fafafa;
   width: 100%;
   margin: 0;
   padding: 1em 0 1em .5em;
-  font-family: 'Libre Baskerville', serif;
 }
 
 .header img {
-  margin-top: 1em;
+  margin-top: -5.5em;
   height: 100px;
   width: 100px;
+  float: right;
 }
 
+.home_page article {
+  position: relative;
+}
 
+.home_page table {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.home_page th {
+  border-bottom: 1px solid black;
+}
+
+.home_page_tborders {
+  border-right: 1px solid black;
+}
+
+tr:nth-of-type(odd) {
+  background-color: #E5E5E5;
+}
 /**
  * Layout
  */
@@ -59,7 +79,6 @@ body {
     width: 40%;
   }
 }
-
 
 /**
  * Forms
