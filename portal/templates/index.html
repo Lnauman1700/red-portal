@@ -3,6 +3,12 @@
 {% block title %}TSCT Portal{% endblock %}
 
 {% block content %}
+
+{% if error %}
+<p>{{error}}</p>
+{% endif %}
+
+
   <form method="post">
     <label for="email">Email
       <input type="email" name="email" />
@@ -12,4 +18,5 @@
     </label>
     <input type="submit" value="Login" />
   </form>
+
 {% endblock %}

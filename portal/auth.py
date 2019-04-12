@@ -11,9 +11,11 @@ def index():
 
         email  = request.form['email']
         password  = request.form['password']
+        error = None
 
-        if email is None or password is None:
-            return render_template('index.html')
+        if email is "" or password is "":
+            error = "Email or password not found"
+            return render_template('index.html', error=error)
         else:
             conn = db.get_db()
             cur = conn.cursor()
@@ -21,10 +23,12 @@ def index():
             user = cur.fetchone()
 
             if user is None:
-                return redirect(url_for('index'))
+                error = "Invalid email or password"
+                return render_template('index.html', error=error)
             # utilize hashes and compare hashed password to password in DB
             elif not check_password_hash(user[2], password):
-                return redirect(url_for('index'))
+                error = "Invalid email or password"
+                return render_template('index.html', error=error)
             else:
                 # store user info in a session
                 session.clear()
