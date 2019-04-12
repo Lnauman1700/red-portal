@@ -42,6 +42,7 @@ def index():
 @bp.route('/logout')
 def logout():
     session.clear()
+    session['user_id'] = None
     return redirect(url_for('index'))
 
 @bp.before_app_request

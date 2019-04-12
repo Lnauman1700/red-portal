@@ -5,23 +5,30 @@ def test_index(client):
     assert b'<h1>TSCT Portal</h1>' in response.data
     assert b'<form method="post">' in response.data
 
-def test_login(client, auth):
-    # on index, we get a 200 status code
+def test_login_logout(client, auth):
     assert client.get('/').status_code == 200
 
-    # w/ wrong info, we redirect to index page
-    assert session['user_id'] == None
-    response = auth.login('tea@stevenscollege.edu', 'q')
-    assert response.headers['Location'] == 'http://localhost/'
-    assert session['user_id'] == None
+    # asserts that we go back to index if login fails
+    with client:
+        response = auth.login()
+        assert response.headers['Location'] == 'http://localhost/'
+        assert session['user_id'] == None
+        assert g.user == None
 
-    # login happens and user session is stored
-    response = auth.login('teacher@stevenscollege.edu', 'qwerty')
-    assert response.headers['Location'] == 'http://localhost/home'
-    assert session['user_id'] == 1
-    assert g.user[1] == 'teacher@stevenscollege.edu'
+    # assert that correct login works
+    with client:
+        response = auth.login('teacher@stevenscollege.edu', 'qwerty')
+        assert response.headers['Location'] == 'http://localhost/home'
+        assert session['user_id'] == 1
+        client.get('/home')
+        assert g.user[0] == 1
 
-    response = auth.logout()
-    assert response.headers['Location'] == 'http://localhost/'
-    assert session['user_id'] == None
-    assert g.user == None
+    # once logged in, check if logout works
+    with client:
+        response = auth.login('teacher@stevenscollege.edu', 'qwerty')
+        response = client.get('/home')
+        response = client.get('/logout')
+        assert response.headers['Location'] == 'http://localhost/'
+        assert session['user_id'] == None
+        client.get('/')
+        assert g.user == None
