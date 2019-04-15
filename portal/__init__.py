@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
@@ -22,12 +23,8 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
-    @app.route('/courses', methods=['GET', 'POST'])
-    def courses():
-        sub = request.form['Submit']
-        if sub:
-            print(request.method)
-        return render_template('courses.html')
+    from . import courses
+    app.register_blueprint(courses.bp)
 
 
 
