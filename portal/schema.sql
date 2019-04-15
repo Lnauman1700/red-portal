@@ -15,7 +15,7 @@ CREATE TABLE courses(
 	teacher_id bigint REFERENCES users (id),
 	course_number varchar(10),
 	--what about making sure that the user we reference is a teacher?
-	course_name text,
+	course_name text NOT NULL,
 	course_info text
 )
 
