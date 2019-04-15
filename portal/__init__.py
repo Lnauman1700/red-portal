@@ -22,9 +22,9 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
-        
-    @app.route('/my_courses')
-    def my_courses():
-        return render_template('my_courses.html')
+    # Importing 'my_courses' Blueprint which is the module rendering 'my_courses' page
+    from . import my_courses
+    app.register_blueprint(my_courses.bp)
+
 
     return app

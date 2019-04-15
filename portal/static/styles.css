@@ -21,7 +21,7 @@ html {
 .header h1 {
   font-family: 'Crimson Text', serif;
   font-weight: 400;
-  background-color: rgb(128, 40, 65);
+  background-image: linear-gradient(to bottom, #53192a, #5e1d30, #692035, #74243b, #802841);
   color: #fafafa;
   width: 100%;
   margin: 0;
@@ -80,6 +80,29 @@ body {
   }
 }
 
+footer {
+  background-image: linear-gradient(to top, #4c1827, #591c2d, #652034, #73243a, #802841);
+  color: #fafafa;
+  margin-right: 2em;
+  margin-left: 2em;
+  font-family: 'Crimson Text', serif;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.footer_left {
+  margin-left: 1em;
+}
+
+.footer_right {
+  background-color: rgb(210, 207, 184);
+  margin: 1em;
+  font-size: 12.5px;
+  padding-left: 5em;
+  border-radius: 3px;
+}
+
+
 /**
  * Forms
  */
@@ -98,3 +121,28 @@ label {
 label input {
   width: 100%;
 }
+
+/**
+ * Scrollbar
+ */
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #802841;
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #692035;
