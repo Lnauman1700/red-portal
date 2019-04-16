@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 
 
 def create_app(test_config=None):
@@ -18,13 +18,16 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    @app.route('/')
-    def index():
-        return render_template('index.html')
+    from . import auth
+    app.register_blueprint(auth.bp)
+    app.add_url_rule('/', endpoint='index')
+
+    @app.route('/home')
+    def home():
+        return render_template('home.html', user=g.user[1])
 
     # Importing 'my_courses' Blueprint which is the module rendering 'my_courses' page
     from . import my_courses
     app.register_blueprint(my_courses.bp)
-
 
     return app
