@@ -12,10 +12,10 @@ def test_validation(client, auth):
         response = client.get('/sessions')
         assert response.headers['Location'] == 'http://localhost/home'
 
-def test_session_route(client):
+def test_session_route(client, auth):
 
     assert client.get('/sessions').status_code == 200
-    
+
     auth.login()
     with client:
         response = client.get('/sessions/1')
