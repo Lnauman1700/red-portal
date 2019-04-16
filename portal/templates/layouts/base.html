@@ -13,13 +13,22 @@
     {% endblock %}
   </head>
   <body>
-    <header>
-      <div class="header">
-        <h1>{{ self.title() }}</h1>
-        <img src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
-      </div>
-    </header>
-
+    <div>
+      <header>
+        <div class="header">
+          <h1>{{ self.title() }}</h1>
+          <img src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
+        </div>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="placeholder">My Courses</a></li>
+          <li><a href="placeholder">News</a></li>
+          <li><a href="placeholder">About</a></li>
+        </ul>
+      </nav>
+    </div>
     <main>
       {% block content %}{% endblock %}
     </main>

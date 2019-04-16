@@ -28,29 +28,64 @@ html {
   padding: 1em 0 1em .5em;
 }
 
-.header img {
+.header img{
   margin-top: -5.5em;
   height: 100px;
   width: 100px;
   float: right;
 }
 
-.home_page article {
+nav ul{
+  margin-top: 0;
+}
+
+nav li {
+  display: inline-block;
+  padding: .5em;
+  opacity: 0.7;
+  border-top: solid 1px #5e1d30;
+  border-bottom: solid 1px transparent;
+  background-color: #802841;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease
+}
+
+nav a {
+  text-decoration: none;
+  color: #fafafa;
+  font-size: 22px;
+}
+
+li:hover {
+  color: #fafafa;
+  background: #802841;
+  opacity: 2;
+  border-bottom: solid 4px rgb(210, 207, 184);
+  box-shadow: 5px 5px 5px #8F8F8F;
+}
+
+.current_page {
+  background-color: #802842;
+}
+/**
+ * This css is for the 'my_courses'page
+ */
+
+.my_courses_page article {
   position: relative;
 }
 
-.home_page table {
+.my_courses_page table {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   border: 1px solid black;
 }
 
-.home_page th {
+.my_courses_page th {
   border-bottom: 1px solid black;
 }
 
-.home_page_tborders {
+.my_courses_page_tborders {
   border-right: 1px solid black;
 }
 
@@ -83,11 +118,7 @@ body {
 footer {
   background-image: linear-gradient(to top, #4c1827, #591c2d, #652034, #73243a, #802841);
   color: #fafafa;
-  margin-right: 2em;
-  margin-left: 2em;
   font-family: 'Crimson Text', serif;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
 }
 
 .footer_left {
