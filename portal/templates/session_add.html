@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}My Sessions{% endblock %}
+
+{% block content %}
+<p>{{session[1]}}</p>
+<p>{{session[2]}}</p>
+
+<form method="post">
+  <label>Select Student:
+    <select>
+      {% for student in students %}
+      <option value"{{student[0]}}">{{ student[1] }}<option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <input type="submit">
+  </label>
+</form>
+
+{% endblock %}

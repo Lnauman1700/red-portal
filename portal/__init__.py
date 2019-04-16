@@ -22,6 +22,9 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.add_url_rule('/', endpoint='index')
 
+    from . import sessions
+    app.register_blueprint(sessions.bp)
+
     @app.route('/home')
     def home():
         return render_template('home.html', user=g.user[1])
