@@ -5,6 +5,9 @@
 
 
 {% block content %}
+{% if error %}
+  <p>{{ error }}</p>
+{% endif %}
   <form method='POST'>
 
     <label for="Course">Course Name
@@ -18,6 +21,15 @@
     </label>
     <input type="submit" value="Submit" />
   </form>
+
+
+  <h2>Edit Courses</h2>
+  <ul>
+      {% for item in rows %}
+      <li><a href="/courses/{{item[0]}}">{{ item[2] }}</a></li>
+      {% endfor %}
+
+  </ul>
 
 
 {% endblock %}
