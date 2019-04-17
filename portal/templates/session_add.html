@@ -8,9 +8,9 @@
 
 <form method="post">
   <label>Select Student:
-    <select>
+    <select name="student">
       {% for student in students %}
-      <option value"{{student[0]}}">{{ student[1] }}<option>
+      <option value="{{student[0]}}">{{student[1]}}</option>
       {% endfor %}
     </select>
   </label>

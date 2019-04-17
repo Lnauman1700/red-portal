@@ -33,7 +33,7 @@ def test_session_route(client, auth):
         response = client.post('/sessions/1', data=dict(
             student=10000
         ))
-        assert b'<p>Error adding student</p>'
+        assert b'<p>Error adding student</p>' in response.data
 
     with client:
         assert client.get('/sessions/79').status_code == 404

@@ -28,20 +28,27 @@ def sessions_add(id):
         cur = conn.cursor()
         cur.execute("SELECT * FROM sessions WHERE session_id = %s", (id,))
         session = cur.fetchone()
-        
+
         # query up the students who aren't in this session, put it in a value
         conn = db.get_db()
         cur = conn.cursor()
         # only include students whose id doesn't show up in the sessions_users junction table under the current session
         cur.execute("SELECT * FROM users WHERE role = 'student'")
         students = cur.fetchall()
+        # take the list and remove anyone who appears under the session id in users_sessions
         # render the template, send previous value in
         return render_template('session_add.html', session=session, students=students)
             # in the template, the options in the drop-down menu will have value=user id and display email
     elif request.method == 'POST':
-        pass
         # grab the value from the post
+        student_id = int(request.form['student'])
         # query inserting the user and the session into users_sessions
+        conn = db.get_db()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id, id,))
+        conn.commit()
         # set message that says whether a success or a fail
+
             # maybe a query that searches for the student/session value in table
         # render same template as in GET request, send in error message
+        return render_template('session_add.html')

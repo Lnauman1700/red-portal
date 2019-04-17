@@ -19,5 +19,5 @@ CREATE TABLE sessions (
 CREATE TABLE users_sessions (
   student bigint REFERENCES users (id) NOT NULL,
   session bigint REFERENCES sessions (session_id) NOT NULL,
-  CONSTRAINT users_sessions_key PRIMARY KEY (student, sessions)
+  CONSTRAINT users_sessions_key PRIMARY KEY (student, session)
 );
