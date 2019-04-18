@@ -7,3 +7,6 @@ VALUES ('teacher@stevenscollege.edu', 'pbkdf2:sha256:150000$nZcp3TLl$66257bad527
 INSERT INTO sessions (letter, session_time)
 VALUES ('A', '2:00 - 4:20 MF'),
        ('B', '3:00-3:30 MTWHF');
+
+INSERT INTO courses (teacher_id,course_number,course_name, course_info)
+VALUES ('1', 'CSET 155', 'Database', 'Work with postgres SQL');

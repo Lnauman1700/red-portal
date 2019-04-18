@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users_sessions;
 DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -21,3 +22,14 @@ CREATE TABLE users_sessions (
   session bigint REFERENCES sessions (session_id) NOT NULL,
   CONSTRAINT users_sessions_key PRIMARY KEY (student, session)
 );
+
+CREATE TABLE courses(
+	course_id bigserial PRIMARY KEY,
+	teacher_id bigint REFERENCES users (id),
+	course_number varchar(10) UNIQUE,
+	--what about making sure that the user we reference is a teacher?
+	course_name text NOT NULL,
+	course_info text
+)
+
+--what if we have user data in users table which courses relies on, then what?

@@ -1,0 +1,25 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}Update {{course[2]}}{% endblock %}
+
+
+{% block content %}
+{% if error %}
+  <p>{{ error }}</p>
+{% endif %}
+  <form method='POST'>
+
+    <label for="Course">Course Name
+      <input type="text" name="course" value="{{course[3]}}"/>
+    </label>
+    <label for="number">Course Number
+        <input type="text" name="course_number" value="{{course[2]}}" />
+    </label>
+    <label for="Info">Info
+        <textarea class='course-info' name="info">{{course[4]}}</textarea>
+    </label>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
