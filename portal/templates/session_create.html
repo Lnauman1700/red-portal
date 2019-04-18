@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Create Session{% endblock %}
+
+{% block content %}
+
+{% if error %}
+<p class="error">{{error}}</p>
+{% endif %}
+
+{% if success %}
+<p>{{success}}</p>
+{% endif %}
+
+<form method="post">
+
+  <label>Session Letter:
+    <input type="text" name="session_letter">
+  </label>
+
+  <label>Session Time:
+    <input type="text" name="session_time">
+  </label>
+   <input type="submit" value="Submit">
+</form>
+
+<a href="/sessions">Go back</a>
+
+{% endblock %}

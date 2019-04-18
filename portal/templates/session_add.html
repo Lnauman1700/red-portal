@@ -3,6 +3,11 @@
 {% block title %}My Sessions{% endblock %}
 
 {% block content %}
+
+{% if error %}
+<p class="error">{{error}}</p>
+{% endif %}
+
 <p>{{session[1]}}</p>
 <p>{{session[2]}}</p>
 
@@ -18,5 +23,7 @@
     <input type="submit">
   </label>
 </form>
+
+<a href="/sessions">Go back</a>
 
 {% endblock %}
