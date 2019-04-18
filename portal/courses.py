@@ -10,12 +10,20 @@ def courses():
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             return redirect(url_for('home'))
+
     elif request.method == 'POST':
         course_number = request.form['course_number']
         course = request.form['course']
         info = request.form['info']
 
-        if course_number is '' or course is '':
+        conn = db.get_db()
+        cur = conn.cursor()
+        cur.execute('SELECT course_number FROM courses WHERE course_number = %s', (course_number,))
+        course_data = cur.fetchone()
+
+        if course_data is not None:
+            error = 'Course number already exists'
+        elif course_number is '' or course is '':
             error = 'Course Number and Course fields required'
 
         if error is None:
@@ -43,17 +51,33 @@ def update(id):
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             return redirect(url_for('home'))
+
+        elif course == None:
+            return redirect(url_for('.courses'))
+
         elif course[1] != g.user[0]:
             return redirect(url_for('.courses'))
+
         else:
             return render_template('update.html', course=course, error=error)
+
     elif request.method == 'POST':
         course_number = request.form['course_number']
         course_name = request.form['course']
         info = request.form['info']
 
-        if course_number is '' or course_name is '':
+        conn = db.get_db()
+        cur = conn.cursor()
+        cur.execute('SELECT course_id, course_number FROM courses WHERE course_number = %s', (course_number,))
+        course_data = cur.fetchone()
+
+        if course_data is not None:
+            if course_data[0] != id:
+                error = 'Course number already exists'
+
+        elif course_number is '' or course is '':
             error = 'Course Number and Course fields required'
+
         if error is None:
             conn = db.get_db()
             cur = conn.cursor()
@@ -62,8 +86,3 @@ def update(id):
             return redirect(url_for('.courses'))
 
     return render_template('update.html', course=course, error=error)
-    # check that the teacher logged in is the one who owns the course at ID
-    # we wanna display form similar or identical to /courses/ route
-    # we want it to update the data for this course
-
-    # maybe make a custom error for if they access an ID that doesn't exist?
