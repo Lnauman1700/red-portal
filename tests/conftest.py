@@ -13,7 +13,7 @@ def app():
         'DB_NAME': 'portal_test',
         'DB_USER': 'portal_user',
     })
-
+        
     with app.app_context():
         init_db()
 
