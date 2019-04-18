@@ -1,5 +1,6 @@
 from flask import Flask, render_template, g, request
 
+from portal.auth import login_required
 
 
 def create_app(test_config=None):
@@ -24,6 +25,7 @@ def create_app(test_config=None):
     app.add_url_rule('/', endpoint='index')
 
     @app.route('/home')
+    @login_required
     def home():
         return render_template('home.html', user=g.user[1])
 

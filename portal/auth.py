@@ -1,3 +1,5 @@
+import functools
+
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, g
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -53,3 +55,12 @@ def get_current_user():
         cur = conn.cursor()
         cur.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
         g.user = cur.fetchone()
+
+def login_required(f):
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+

@@ -17,7 +17,7 @@
         <input type="text" name="course_number" />
     </label>
     <label for="Info">Info
-      <input class='course-info' type="test" name="info" />
+      <textarea class='course-info' name="info" ></textarea>
     </label>
     <input type="submit" value="Submit" />
   </form>
@@ -28,7 +28,6 @@
       {% for item in rows %}
       <li><a href="/courses/{{item[0]}}">{{ item[2] }}</a></li>
       {% endfor %}
-
   </ul>
 
 
