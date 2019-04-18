@@ -204,6 +204,7 @@ label input {
   width: 100%;
 }
 
+
 /**
  * Scrollbar
  */
@@ -228,3 +229,8 @@ label input {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #692035;
+}  
+
+.course-info {
+  height: 100px;
+}
