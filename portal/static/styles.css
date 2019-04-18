@@ -27,39 +27,89 @@ html {
   padding: 1em 0 1em .5em;
 }
 
-.header img{
+.logo_img {
   margin-top: -5.5em;
+  margin-left: 1em;
   height: 100px;
   width: 100px;
   float: right;
 }
 
-nav ul{
+
+/**
+ * Logout feature styling
+ */
+
+.logout {
+  margin-top: -3.5em;
+  height: 30px;
+  width: 30px;
+  float: right;
+}
+
+.dropdown{
+  margin-top: -1.5em;
+  width: 100px;
+  float: right;
+  /* display:block; */
+
+}
+
+.dropdown a {
+  margin-left: 3.2em;
+  position: relative;
+  z-index: -1;
+  color: #fafafa;
+}
+
+.dropdown:hover a{
+  z-index: 1;
+}
+
+
+/**
+ * Nav styling
+ */
+
+nav ul {
   margin-top: 0;
 }
 
 nav li {
   display: inline-block;
-  padding: .5em;
+  margin-top: 0;
+  margin-left: 1px;
+  margin-right: 1px;
   opacity: 0.7;
-  border-top: solid 1px #5e1d30;
-  border-bottom: solid 1px transparent;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  border-bottom: solid 4px transparent;
   background-color: #802841;
   transition: background-color 0.5s ease, box-shadow 0.5s ease
 }
 
 nav a {
   text-decoration: none;
+  padding: .5em;
   color: #fafafa;
   font-size: 22px;
 }
 
 li:hover {
+  background: rgb(210, 207, 184);
+  opacity: 1;
+  border-bottom: solid 4px #802841;
+  box-shadow: 5px 5px 5px #8F8F8F;
+}
+
+.anchor:hover {
+  color: #802841;
+}
+
+.current_page{
   color: #fafafa;
   background: #802841;
-  opacity: 2;
-  border-bottom: solid 4px rgb(210, 207, 184);
-  box-shadow: 5px 5px 5px #8F8F8F;
+  opacity: 1;
 }
 
 .current_page {
@@ -82,10 +132,12 @@ li:hover {
 
 .my_courses_page th {
   border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 }
 
 .my_courses_page_tborders {
-  border-right: 1px solid black;
+  border-left: 1px solid black;
 }
 
 tr:nth-of-type(odd) {

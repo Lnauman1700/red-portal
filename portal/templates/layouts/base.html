@@ -17,8 +17,10 @@
     <div>
       <header>
         <div class="header">
-          <h1>{{ self.title() }}</h1>
-          <img src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
+          <h1 class"header".>{{ self.title() }}</h1>
+          <img class="logo_img" src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
+          {% block logout %}
+          {% endblock %}
         </div>
       </header>
       {% block nav %}
