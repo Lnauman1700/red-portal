@@ -16,9 +16,9 @@ def test_courses_route(client, auth):
     with client:
         auth.login()
         response = client.post('/courses', data={
-        'course': 'h',
-        'course_number': '', 
-        'info': 'h',
+            'course': 'h',
+            'course_number': '', 
+            'info': 'h',
         })
         assert b'<p>Course Number and Course fields required</p>' in response.data
 
@@ -46,8 +46,8 @@ def test_course_update(client, auth):
     response_2 = response = client.get('/courses')
     assert b'<li><a href="/courses/1">h</a></li>' in response_2.data
     other = client.post('/courses/1', data={
-    'course': 'h',
-    'course_number': '', 
-    'info': 'h',
+        'course': 'h',
+        'course_number': '', 
+        'info': 'h',
     })
     assert b'<p>Course Number and Course fields required</p>' in other.data
