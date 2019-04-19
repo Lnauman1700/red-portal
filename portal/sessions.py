@@ -76,7 +76,7 @@ def create_session():
     conn = db.get_db()
     cur = conn.cursor()
     # queries up all of the courses associated with the currently logged in teacher
-    cur.execute("SELECT * FROM courses WHERE teacher_id = %s", (g.user[0],))
+    cur.execute("SELECT * FROM courses WHERE teacher_id = %s;", (g.user[0],))
     courses = cur.fetchall()
 
     if request.method == 'GET':
@@ -91,9 +91,12 @@ def create_session():
         session_time = request.form['session_time']
         course_id = request.form['course_id']
 
-        if session_letter is "" or session_time is "" or course_id is "":
+        if course_id is "" or session_letter is "" or session_time is "":
             message = "Please complete entire form"
-            return render_template('session_create.html', error=error, message=message)
+            return render_template('session_create.html', courses=courses, message=message)
+        elif len(session_letter) > 1:
+            message = "Form was incorrectly filled out"
+            return render_template('session_create.html', courses=courses, message=message)
         else:
             conn = db.get_db()
             cur = conn.cursor()

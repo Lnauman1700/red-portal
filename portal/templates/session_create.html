@@ -12,6 +12,7 @@
 
   <label>Course:
     <select name="course_id">
+      <option hidden></option>
       {% for course in courses %}
       <option value="{{course[0]}}">{{course[3]}} - {{course[2]}}</option>
       {% endfor %}
