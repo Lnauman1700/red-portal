@@ -37,6 +37,7 @@ def index():
                 session['user_id'] = user[0]
                 return redirect(url_for('home'))
     else:
+        session.clear()
         return render_template('index.html')
 
 @bp.route('/logout')
@@ -63,4 +64,3 @@ def login_required(f):
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
-

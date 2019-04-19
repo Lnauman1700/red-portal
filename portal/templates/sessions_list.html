@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}My Sessions{% endblock %}
+
+{% block content %}
+<ul>
+  {% for session in sessions %}
+    <li><a href="/sessions/{{session[0]}}">{{session[6]}}{{session[1]}}</a></li>
+  {% endfor %}
+</ul>
+
+<a href="/sessions/create">Create Session</a>
+{% endblock %}
