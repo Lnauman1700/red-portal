@@ -1,4 +1,4 @@
-from flask import Flask, request, Blueprint, render_template, g, redirect, url_for
+from flask import Flask, request, Blueprint, render_template, g, make_response, redirect, url_for
 from . import db
 from portal.auth import login_required
 bp = Blueprint('courses', __name__)
@@ -9,7 +9,8 @@ def courses():
     error = None
     if request.method == 'GET':
         if g.user[3] != 'teacher':
-            return redirect(url_for('home'))
+            message = 'You are not permitted to view this page'
+            return make_response(render_template('error_page.html', message=message), 401)
 
     elif request.method == 'POST':
         course_number = request.form['course_number']
@@ -50,13 +51,16 @@ def update(id):
     error = None
     if request.method == 'GET':
         if g.user[3] != 'teacher':
-            return redirect(url_for('home'))
+            message = 'You are not permitted to view this page'
+            return make_response(render_template('error_page.html', message=message), 401)
 
         elif course == None:
-            return redirect(url_for('.courses'))
+            message = 'Page not found'
+            return make_response(render_template('error_page.html', message=message), 404)
 
         elif course[1] != g.user[0]:
-            return redirect(url_for('.courses'))
+            message = 'You are not permitted to view this page'
+            return make_response(render_template('error_page.html', message=message), 401)
 
         else:
             return render_template('update.html', course=course, error=error)

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, g, redirect, url_for, make_response
+from flask import Flask, render_template, request, Blueprint, g, make_response
 
 from . import db
 from portal.auth import login_required
@@ -39,7 +39,7 @@ def sessions_add(id):
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
-            return render_template('error_page.html', message=message)
+            return make_response(render_template('error_page.html', message=message), 401)
         else:
             # if session doesn't exist, then throw error
             if session is None:
@@ -82,7 +82,7 @@ def create_session():
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
-            return render_template('error_page.html', message=message)
+            return make_response(render_template('error_page.html', message=message), 401)
         else:
             return render_template('session_create.html', courses=courses)
 
