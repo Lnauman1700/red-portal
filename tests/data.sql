@@ -8,13 +8,12 @@ VALUES ('teacher@stevenscollege.edu', 'pbkdf2:sha256:150000$nZcp3TLl$66257bad527
 INSERT INTO courses (teacher_id,course_number,course_name, course_info)
 VALUES ('1', 'CSET 155', 'Database', 'Work with postgres SQL');
 
-<<<<<<< HEAD
 INSERT INTO sessions (letter, session_time, course_id)
 VALUES ('A', '2:00 - 4:20 MF', 1),
        ('B', '3:00-3:30 MTWHF', 1);
-=======
+
 INSERT INTO assignments (course_id,assignment_name, assignment_info)
 VALUES ('1','Create Database', 'Work with postgres SQL');
 
 
->>>>>>> -created the assignments outline
+

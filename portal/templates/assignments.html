@@ -9,7 +9,13 @@
   <p>{{ error }}</p>
 {% endif %}
   <form method='POST'>
-
+    <label>Select Course:
+        <select name="course">
+          {% for course in courses %}
+          <option value="{{course[0]}}">{{course[1]}}</option>
+          {% endfor %}
+        </select>
+      </label>
     <label for="assignment_name">Assignment Name
       <input type="text" name="assignment_name" />
     </label>
