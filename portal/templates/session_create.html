@@ -4,12 +4,8 @@
 
 {% block content %}
 
-{% if error %}
-<p class="error">{{error}}</p>
-{% endif %}
-
-{% if success %}
-<p>{{success}}</p>
+{% if message %}
+<p class="error">{{message}}</p>
 {% endif %}
 
 <form method="post">

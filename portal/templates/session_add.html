@@ -1,11 +1,11 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}My Sessions{% endblock %}
+{% block title %}{{session[6]}}{{session[1]}}{% endblock %}
 
 {% block content %}
 
-{% if error %}
-<p class="error">{{error}}</p>
+{% if message %}
+<p class="error">{{message}}</p>
 {% endif %}
 
 <p>{{session[6]}}{{session[1]}}</p>
