@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Oh no!{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<p>{{message}}</p>
+{% endif %}
+
+
+<a href="/home">Go back</a>
+
+{% endblock %}

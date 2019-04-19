@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Create Session{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<p class="error">{{message}}</p>
+{% endif %}
+
+<form method="post">
+
+  <label>Course:
+    <select name="course_id">
+      <option hidden></option>
+      {% for course in courses %}
+      <option value="{{course[0]}}">{{course[3]}} - {{course[2]}}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Session Letter:
+    <input type="text" name="session_letter">
+  </label>
+
+  <label>Session Time:
+    <input type="text" name="session_time">
+  </label>
+   <input type="submit" value="Submit">
+</form>
+
+<a href="/sessions">Go back</a>
+
+{% endblock %}

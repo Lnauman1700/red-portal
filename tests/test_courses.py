@@ -1,5 +1,9 @@
 from flask import request
 def test_courses_route(client, auth):
+
+    with client:
+        response = client.get('/courses')
+        assert response.headers['Location'] == 'http://localhost/'
     with client:
         auth.login()
         response = client.get('/courses')
@@ -12,12 +16,12 @@ def test_courses_route(client, auth):
         auth.login('student@stevenscollege.edu', 'asdfgh')
         response = client.get('/courses')
         # test that student got redirected home
-        assert response.headers['Location'] == 'http://localhost/home'
+        assert b'You are not permitted to view this page' in response.data
     with client:
         auth.login()
         response = client.post('/courses', data={
             'course': 'h',
-            'course_number': '', 
+            'course_number': '',
             'info': 'h',
         })
         assert b'<p>Course Number and Course fields required</p>' in response.data
@@ -37,7 +41,7 @@ def test_course_update(client, auth):
     # let's actually update that shit, submit a post request w/ data that will work
     response = client.post('/courses/1', data={
         'course': 'h',
-        'course_number': 'h', 
+        'course_number': 'h',
         'info': 'h',
     })
     # test that it redirects to courses
@@ -47,7 +51,7 @@ def test_course_update(client, auth):
     assert b'<li><a href="/courses/1">h</a></li>' in response_2.data
     other = client.post('/courses/1', data={
         'course': 'h',
-        'course_number': '', 
+        'course_number': '',
         'info': 'h',
     })
     assert b'<p>Course Number and Course fields required</p>' in other.data

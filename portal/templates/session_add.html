@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{session[6]}}{{session[1]}}{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<p class="error">{{message}}</p>
+{% endif %}
+
+<p>{{session[6]}}{{session[1]}}</p>
+<p>{{session[2]}}</p>
+
+<form method="post">
+  <label>Select Student:
+    <select name="student">
+      {% for student in students %}
+      <option value="{{student[0]}}">{{student[1]}}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <input type="submit">
+  </label>
+</form>
+
+<a href="/sessions">Go back</a>
+
+{% endblock %}
