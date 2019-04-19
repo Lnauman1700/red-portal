@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users_sessions;
 DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS users;
 
@@ -10,7 +11,8 @@ CREATE TABLE users (
     role varchar(7) NOT NULL CHECK (role IN ('teacher', 'student'))
 );
 
-CREATE TABLE courses (
+
+CREATE TABLE courses(
 	course_id bigserial PRIMARY KEY,
 	teacher_id bigint REFERENCES users (id),
 	course_number varchar(10) UNIQUE,
@@ -32,3 +34,10 @@ CREATE TABLE users_sessions (
 );
 
 --what if we have user data in users table which courses relies on, then what?
+CREATE TABLE assignments(
+	assignment_id bigserial PRIMARY KEY,
+	course_id bigint REFERENCES courses (course_id),
+	assignment_name text NOT NULL,
+	assignment_info text
+);
+

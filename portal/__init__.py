@@ -35,7 +35,8 @@ def create_app(test_config=None):
     from . import courses
     app.register_blueprint(courses.bp)
 
-
+    from . import assignments
+    app.register_blueprint(assignments.bp)
 
     return app
 
