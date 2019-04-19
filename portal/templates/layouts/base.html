@@ -19,11 +19,38 @@
         <div class="header">
           <h1 class"header".>{{ self.title() }}</h1>
           <img class="logo_img" src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
-          {% block logout %}
-          {% endblock %}
         </div>
       </header>
+
+      {% block logout %}
+      <div class="dropdown">
+        <img class="logout" src="../static/images/profile_icon.png" alt="User logo"/>
+        <div class="dropdown-content">
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+      {% endblock %}
       {% block nav %}
+      {% if g.user[3] == 'teacher' %}
+      <nav>
+        <ul>
+          <li class="pretty_li"><a class="pretty_anchor" href="/home">Home</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/courses">Courses</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">News</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">About</a></li>
+        </ul>
+      </nav>
+      {% endif %}
+      {% if g.user[3] == 'student' %}
+      <nav>
+        <ul>
+          <li class="pretty_li"><a class="pretty_anchor" href="/home">Home</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/my_courses">Courses</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">News</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">About</a></li>
+        </ul>
+      </nav>
+      {% endif %}
       {% endblock %}
     </div>
     <main>

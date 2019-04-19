@@ -6,6 +6,7 @@ bp = Blueprint('my_courses',__name__)
 
 # adding the app routing to the 'my_courses'page
 @bp.route('/my_courses')
+@login_required
 def my_courses():
     table_headers = ["Course", "Location", "Instructor", "Time"]
 
