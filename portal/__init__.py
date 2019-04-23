@@ -32,10 +32,12 @@ def create_app(test_config=None):
     def home():
         return render_template('home.html', user=g.user[1])
 
+    # Importing 'my_courses' Blueprint which is the module rendering 'my_courses' page
+    from . import my_courses
+    app.register_blueprint(my_courses.bp)
+
     from . import courses
     app.register_blueprint(courses.bp)
 
 
-
     return app
-
