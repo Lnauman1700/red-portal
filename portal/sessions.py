@@ -78,6 +78,7 @@ def create_session():
     # queries up all of the courses associated with the currently logged in teacher
     cur.execute("SELECT * FROM courses WHERE teacher_id = %s;", (g.user[0],))
     courses = cur.fetchall()
+    cur.close()
 
     if request.method == 'GET':
         if g.user[3] != 'teacher':
@@ -90,18 +91,44 @@ def create_session():
         session_letter = request.form['session_letter']
         session_time = request.form['session_time']
         course_id = request.form['course_id']
+        students = request.form.getlist('student')
 
-        if course_id is "" or session_letter is "" or session_time is "":
+        if course_id is "" or session_letter is "" or session_time is "" or "" in students:
             message = "Please complete entire form"
             return render_template('session_create.html', courses=courses, message=message)
         elif len(session_letter) > 1:
             message = "Form was incorrectly filled out"
             return render_template('session_create.html', courses=courses, message=message)
         else:
-            conn = db.get_db()
-            cur = conn.cursor()
+            message = ''
+            # check that all students who are in students list are actual students
+            for student in students:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT * FROM users WHERE email = %s", (student,))
+                        studentValue = cur.fetchone()
+                        if studentValue is None:
+                            message = f'A student with the email {student} does not exist'
+                            break
             # create a new session using the form data
-            cur.execute("INSERT INTO sessions (letter, session_time, course_id) VALUES (%s, %s, %s)", (session_letter, session_time, course_id))
-            conn.commit()
-            message = "Session successfuly created"
+            if 'A student with the email' not in message:
+                session_id = ''
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("INSERT INTO sessions (letter, session_time, course_id) VALUES (%s, %s, %s)", (session_letter, session_time, course_id))
+                        conn.commit()
+                        cur.execute("SELECT session_id FROM sessions ORDER BY session_id DESC")
+                        session_id = cur.fetchone()
+                message = "Session successfuly created"
+                # add the students to the newly-made session (query up the session id of the recently added session)
+                for student in students:
+                    with db.get_db() as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("SELECT id FROM users WHERE email = %s", (student,))
+                            student_id = cur.fetchone()
+                            cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id[0], session_id))
+                            conn.commit()
+
+
+
             return render_template('session_create.html', message=message, courses=courses)
