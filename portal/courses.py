@@ -21,6 +21,7 @@ def courses():
         cur = conn.cursor()
         cur.execute('SELECT course_number FROM courses WHERE course_number = %s', (course_number,))
         course_data = cur.fetchone()
+        cur.close()
 
         if course_data is not None:
             error = 'Course number already exists'
@@ -32,12 +33,15 @@ def courses():
             cur = conn.cursor()
             cur.execute("INSERT INTO courses (teacher_id,course_number,course_name, course_info) VALUES (%s,%s,%s,%s)", (int(g.user[0]),course_number,course,info,))
             conn.commit()
+            cur.close()
 
     conn = db.get_db()
     cur = conn.cursor()
     cur.execute('SELECT * FROM courses WHERE teacher_id = %s', (g.user[0],))
 
     rows = cur.fetchall()
+    cur.close()
+
 
     return render_template('courses.html', rows=rows, error=error)
 
@@ -48,6 +52,8 @@ def update(id):
     cur = conn.cursor()
     cur.execute('SELECT * FROM courses WHERE course_id = %s', (id,))
     course = cur.fetchone()
+    cur.close()
+
     error = None
     if request.method == 'GET':
         if g.user[3] != 'teacher':
@@ -74,7 +80,7 @@ def update(id):
         cur = conn.cursor()
         cur.execute('SELECT course_id, course_number FROM courses WHERE course_number = %s', (course_number,))
         course_data = cur.fetchone()
-
+        cur.close()
         if course_data is not None:
             if course_data[0] != id:
                 error = 'Course number already exists'
@@ -87,6 +93,8 @@ def update(id):
             cur = conn.cursor()
             cur.execute("UPDATE courses SET course_number = %s, course_name = %s, course_info = %s WHERE course_id = %s", (course_number,course_name,info,id))
             conn.commit()
+            cur.close()
+
             return redirect(url_for('.courses'))
 
     return render_template('update.html', course=course, error=error)

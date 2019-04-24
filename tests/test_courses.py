@@ -47,7 +47,7 @@ def test_course_update(client, auth):
     # test that it redirects to courses
     assert response.headers['Location'] == 'http://localhost/courses'
     # let's check if response changed from that data being submitted
-    response_2 = response = client.get('/courses')
+    response_2 = client.get('/courses')
     assert b'<li><a href="/courses/1">h</a></li>' in response_2.data
     other = client.post('/courses/1', data={
         'course': 'h',

@@ -9,10 +9,10 @@
   <p>{{ error }}</p>
 {% endif %}
   <form method='POST'>
-    <label>Select Course:
-        <select name="course">
-          {% for course in courses %}
-          <option value="{{course[0]}}">{{course[1]}}</option>
+    <label>Select Session:
+        <select name="session">
+          {% for session in sessions %}
+          <option value="{{session[0]}}">{{session[6]}} {{session[1]}}</option>
           {% endfor %}
         </select>
       </label>
@@ -29,8 +29,8 @@
 
   <h2>Edit Assignment</h2>
   <ul>
-      {% for item in rows %}
-      <li><a href="/assignments/{{item[0]}}">{{ item[2] }}</a></li>
+      {% for item in assign %}
+      <li><a href="/assignments/{{item[0]}}">{{ item[2] }}</li>
       {% endfor %}
   </ul>
 

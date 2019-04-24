@@ -17,6 +17,7 @@ def sessions_index():
             cur = conn.cursor()
             cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
             sessions = cur.fetchall()
+            cur.close()
 
             return render_template('sessions_list.html', sessions=sessions)
 
@@ -30,11 +31,13 @@ def sessions_add(id):
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE role = 'student'")
     students = cur.fetchall()
+    cur.close()
 
     conn = db.get_db()
     cur = conn.cursor()
     cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE sessions.session_id = %s AND courses.teacher_id = %s", (id, g.user[0],))
     session = cur.fetchone()
+    cur.close()
 
     if request.method == 'GET':
         if g.user[3] != 'teacher':
@@ -65,6 +68,7 @@ def sessions_add(id):
             # query inserting the user and the session into users_sessions
             cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id, id,))
             conn.commit()
+            cur.close()
             message = 'Student successfully added'
 
         return render_template('session_add.html', session=session, students=students, id=id, message=message)
@@ -78,6 +82,7 @@ def create_session():
     # queries up all of the courses associated with the currently logged in teacher
     cur.execute("SELECT * FROM courses WHERE teacher_id = %s;", (g.user[0],))
     courses = cur.fetchall()
+    cur.close()
 
     if request.method == 'GET':
         if g.user[3] != 'teacher':
@@ -103,5 +108,6 @@ def create_session():
             # create a new session using the form data
             cur.execute("INSERT INTO sessions (letter, session_time, course_id) VALUES (%s, %s, %s)", (session_letter, session_time, course_id))
             conn.commit()
+            cur.close()
             message = "Session successfuly created"
             return render_template('session_create.html', message=message, courses=courses)

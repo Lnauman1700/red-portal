@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS users_sessions;
 DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS users;
 
@@ -36,7 +36,7 @@ CREATE TABLE users_sessions (
 --what if we have user data in users table which courses relies on, then what?
 CREATE TABLE assignments(
 	assignment_id bigserial PRIMARY KEY,
-	course_id bigint REFERENCES courses (course_id),
+	session_id bigint REFERENCES sessions (session_id),
 	assignment_name text NOT NULL,
 	assignment_info text
 );

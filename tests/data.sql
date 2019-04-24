@@ -12,8 +12,8 @@ INSERT INTO sessions (letter, session_time, course_id)
 VALUES ('A', '2:00 - 4:20 MF', 1),
        ('B', '3:00-3:30 MTWHF', 1);
 
-INSERT INTO assignments (course_id,assignment_name, assignment_info)
-VALUES ('1','Create Database', 'Work with postgres SQL');
+INSERT INTO assignments (session_id, assignment_name, assignment_info)
+VALUES ('1','Delete Database', 'Work with postgres SQL');
 
 
 

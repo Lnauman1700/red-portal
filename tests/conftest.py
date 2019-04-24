@@ -21,8 +21,8 @@ def app():
             con = get_db()
             cur = con.cursor()
             cur.execute(f.read())
-            cur.close()
             con.commit()
+            cur.close()
             con.close()
 
     yield app

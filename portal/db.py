@@ -34,9 +34,8 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         cur = db.cursor()
         cur.execute(f.read())
-        cur.close()
         db.commit()
-
+        cur.close()
 def create_user(email, hash, role):
     db = get_db()
     cur = db.cursor()
