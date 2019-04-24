@@ -105,7 +105,7 @@ def create_session():
             for student in students:
                 with db.get_db() as conn:
                     with conn.cursor() as cur:
-                        cur.execute("SELECT * FROM users WHERE email = %s", (student,))
+                        cur.execute("SELECT * FROM users WHERE email = %s AND role = 'student'", (student,))
                         studentValue = cur.fetchone()
                         if studentValue is None:
                             message = f'A student with the email {student} does not exist'
@@ -124,11 +124,16 @@ def create_session():
                 for student in students:
                     with db.get_db() as conn:
                         with conn.cursor() as cur:
+                            # grab student's id
                             cur.execute("SELECT id FROM users WHERE email = %s", (student,))
                             student_id = cur.fetchone()
-                            cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id[0], session_id))
-                            conn.commit()
-
+                            # check that this student isn't already in the session
+                            cur.execute("SELECT * FROM users_sessions WHERE student = %s AND session = %s", (student_id, session_id))
+                            already_added = cur.fetchone()
+                            # if student isn't in this session, add them in
+                            if already_added is None:
+                                cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id[0], session_id))
+                                conn.commit()
 
 
             return render_template('session_create.html', message=message, courses=courses)
