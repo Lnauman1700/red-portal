@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, g, make_response, redirect, url_for
+from flask import Flask, render_template, request, Blueprint, g, make_response
 
 from . import db
 from portal.auth import login_required
@@ -14,14 +14,12 @@ def sessions_index():
             return make_response(render_template('error_page.html', message=message), 401)
         else:
             # all of the sessions/create html stuff goes into here
-            conn = db.get_db()
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
-            sessions = cur.fetchall()
-            # display a list of sessions so you can eventually edit them
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
+                    sessions = cur.fetchall()
 
             return render_template('sessions_list.html', sessions=sessions)
-    # add sessions/create POST request stuff into here
 
 @bp.route('/sessions/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -93,7 +91,7 @@ def sessions_add(id):
                                 if already_added is None:
                                     cur.execute("INSERT INTO users_sessions VALUES (%s, %s)", (student_id[0], id))
                                     conn.commit()
-
+                # update sessions variable to reflect the newly entered data
                 with db.get_db() as conn:
                     with conn.cursor() as cur:
                         cur.execute("SELECT sessions.letter, sessions.session_time, courses.course_number FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE sessions.session_id = %s AND courses.teacher_id = %s", (id, g.user[0],))
@@ -107,12 +105,11 @@ def sessions_add(id):
 @login_required
 def create_session():
 
-    conn = db.get_db()
-    cur = conn.cursor()
-    # queries up all of the courses associated with the currently logged in teacher
-    cur.execute("SELECT * FROM courses WHERE teacher_id = %s;", (g.user[0],))
-    courses = cur.fetchall()
-    cur.close()
+    with db.get_db() as conn:
+        with conn.cursor() as cur:
+            # queries up all of the courses associated with the currently logged in teacher
+            cur.execute("SELECT * FROM courses WHERE teacher_id = %s;", (g.user[0],))
+            courses = cur.fetchall()
 
     if request.method == 'GET':
         if g.user[3] != 'teacher':
