@@ -58,6 +58,8 @@ def get_current_user():
         cur.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
         g.user = cur.fetchone()
         cur.close()
+
+        
 def login_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):

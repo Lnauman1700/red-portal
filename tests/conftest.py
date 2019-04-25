@@ -18,12 +18,9 @@ def app():
         init_db()
 
         with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-            con = get_db()
-            cur = con.cursor()
-            cur.execute(f.read())
-            con.commit()
-            cur.close()
-            con.close()
+            with get_db() as con:
+                with con.cursor() as cur:
+                    cur.execute(f.read())
 
     yield app
 

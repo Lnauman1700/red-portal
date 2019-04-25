@@ -33,7 +33,6 @@ def sessions_add(id):
     cur.execute("SELECT * FROM users WHERE role = 'student'")
     students = cur.fetchall()
 
-    conn = db.get_db()
     cur = conn.cursor()
     cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE sessions .session_id = %s AND courses.teacher_id = %s", (id, g.user[0],))
     session = cur.fetchone()
@@ -57,7 +56,6 @@ def sessions_add(id):
         # grab the value from the post
         student_id = int(request.form['student'])
 
-        conn = db.get_db()
         cur = conn.cursor()
         cur.execute("SELECT * FROM users_sessions WHERE student = %s AND session = %s", (student_id, id,))
         already_present = cur.fetchone()
@@ -101,9 +99,8 @@ def create_session():
             error = "Please complete entire form"
             return render_template('session_create.html', error=error, courses=courses)
         else:
-            conn = db.get_db()
             cur = conn.cursor()
             cur.execute("INSERT INTO sessions (letter, session_time, course_id) VALUES (%s, %s, %s)", (session_letter, session_time, course_id))
             conn.commit()
-            success = "Session successfuly created"
+            success = "Session successfully created"
             return render_template('session_create.html', success=success, courses=courses)

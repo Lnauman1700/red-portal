@@ -1,9 +1,8 @@
-from flask import request
 def test_courses_route(client, auth):
-
     with client:
         response = client.get('/courses')
         assert response.headers['Location'] == 'http://localhost/'
+
     with client:
         auth.login()
         response = client.get('/courses')
@@ -11,12 +10,16 @@ def test_courses_route(client, auth):
         assert b'<h1>Courses</h1>' in response.data
         assert b"<form method='POST'>" in response.data
         assert b'<li><a href="/courses/1">CSET 155</a></li>' in response.data
+
     # extra thing which checks what happens when a student tries to enter
     with client:
         auth.login('student@stevenscollege.edu', 'asdfgh')
         response = client.get('/courses')
         # test that student got redirected home
         assert b'You are not permitted to view this page' in response.data
+
+
+def test_create_course_validation(client, auth):
     with client:
         auth.login()
         response = client.post('/courses', data={
@@ -25,6 +28,7 @@ def test_courses_route(client, auth):
             'info': 'h',
         })
         assert b'<p>Course Number and Course fields required</p>' in response.data
+
 
 def test_course_update_route(client, auth):
     with client:
@@ -55,3 +59,17 @@ def test_course_update(client, auth):
         'info': 'h',
     })
     assert b'<p>Course Number and Course fields required</p>' in other.data
+
+def test_errors(client, auth):
+    auth.login()
+    response = client.get("/courses/2")
+
+    assert b'<h1>Oh no!</h1>' in response.data
+    assert b'<p>Page not found</p>' in response.data
+    assert 404 == response.status_code
+
+    with client:
+        auth.login('student@stevenscollege.edu', 'asdfgh')
+        response = client.get('/courses/1')
+        # test that student got redirected home
+        assert b'You are not permitted to view this page' in response.data

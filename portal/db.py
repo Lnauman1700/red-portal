@@ -36,6 +36,8 @@ def init_db():
         cur.execute(f.read())
         db.commit()
         cur.close()
+
+
 def create_user(email, hash, role):
     db = get_db()
     cur = db.cursor()

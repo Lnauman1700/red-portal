@@ -3,6 +3,9 @@
 {% block title %}My Sessions{% endblock %}
 
 {% block content %}
+{% if error %}
+{{ error }}
+{{% end error %}}
 <ul>
   {% for session in sessions %}
     <li><a href="/sessions/{{session[0]}}">{{session[6]}}{{session[1]}}</a></li>

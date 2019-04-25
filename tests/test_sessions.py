@@ -74,6 +74,6 @@ def test_session_create(client, auth):
         session_letter='C',
         session_time='H'
     ))
-    assert b'Session successfuly created' in response.data
+    assert b'Session successfully created' in response.data
     response = client.get('/sessions')
     assert b'CSET 155C' in response.data

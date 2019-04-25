@@ -14,11 +14,23 @@ def assignments():
     sessions = cur.fetchall()
     cur.close()
 
-
-    conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT courses.course_name, courses.course_number, sessions.letter, users.email, users.id, sessions.session_time, users_sessions.student, sessions.session_id, assignments.assignment_name FROM courses JOIN sessions ON courses.course_id = sessions.course_id JOIN users ON courses.teacher_id = users.id JOIN users_sessions ON sessions.session_id = users_sessions.session JOIN assignments ON assignments.session_id = sessions.session_id WHERE users.id = %s;", (g.user[0],))
-    assign = cur.fetchone()
+    cur.execute("""
+        SELECT  assignments.assignment_id,
+                assignments.assignment_name,
+                courses.course_name,
+                courses.course_number,
+                users.email,
+                sessions.letter,
+                sessions.session_time,
+                sessions.session_id
+        FROM courses
+        JOIN users ON courses.teacher_id = users.id
+        JOIN sessions ON courses.course_id = sessions.course_id
+        JOIN assignments ON assignments.session_id = sessions.session_id
+        WHERE courses.teacher_id = %s
+    """, (g.user[0],))
+    assign = cur.fetchall()
     cur.close()
 
     if request.method == 'GET':
@@ -33,12 +45,12 @@ def assignments():
         if assignment_name is '':
             message = 'assignment name fields required'
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
+
         elif sess_id is '':
             message = 'Session required'
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
 
         if message is None:
-            conn = db.get_db()
             cur = conn.cursor()
             cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info) VALUES (%s,%s,%s)", (sess_id, assignment_name, info,))
             conn.commit()
@@ -46,6 +58,7 @@ def assignments():
             return redirect(url_for('.assignments'))
 
     return render_template('assignments.html', message=message, assign=assign, sessions=sessions)
+
 
 @bp.route('/assignments/<int:id>', methods=('GET', 'POST'))
 @login_required
@@ -56,10 +69,22 @@ def assignment_update(id):
     assignment = cur.fetchone()
     cur.close()
 
-
-    conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT courses.course_name, courses.course_number, sessions.letter, users.email, users.id, sessions.session_time, users_sessions.student, sessions.session_id, assignments.assignment_name FROM courses JOIN sessions ON courses.course_id = sessions.course_id JOIN users ON courses.teacher_id = users.id JOIN assignments ON assignments.session_id = sessions.session_id WHERE users.id = %s;", (g.user[0],))
+    cur.execute("""
+        SELECT  assignments.assignment_id,
+                assignments.assignment_name,
+                courses.course_name,
+                courses.course_number,
+                users.email,
+                sessions.letter,
+                sessions.session_time,
+                sessions.session_id
+        FROM courses
+        JOIN users ON courses.teacher_id = users.id
+        JOIN sessions ON courses.course_id = sessions.course_id
+        JOIN assignments ON assignments.session_id = sessions.session_id
+        WHERE courses.teacher_id = %s
+    """, (g.user[0],))
     assign = cur.fetchone()
     cur.close()
 
@@ -89,7 +114,6 @@ def assignment_update(id):
             return (render_template('update_assignments.html', message=message, assignment=assignment))
 
         if error is None:
-            conn = db.get_db()
             cur = conn.cursor()
             cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s WHERE assignment_id = %s", (assignment_name,info,id))
             conn.commit()
