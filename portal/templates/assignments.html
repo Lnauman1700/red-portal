@@ -5,12 +5,13 @@
 
 
 {% block content %}
-{% if error %}
-  <p>{{ error }}</p>
+{% if message %}
+  <p>{{ message }}</p>
 {% endif %}
   <form method='POST'>
     <label>Select Session:
         <select name="session">
+          <option></option>
           {% for session in sessions %}
           <option value="{{session[0]}}">{{session[6]}} {{session[1]}}</option>
           {% endfor %}
@@ -29,9 +30,7 @@
 
   <h2>Edit Assignment</h2>
   <ul>
-      {% for item in assign %}
-      <li><a href="/assignments/{{item[0]}}">{{ item[2] }}</li>
-      {% endfor %}
+      <li>{{ assign }}</li>
   </ul>
 
 
