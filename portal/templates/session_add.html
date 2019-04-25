@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}{{session[6]}}{{session[1]}}{% endblock %}
+{% block title %}{{session[2]}}{{session[0]}}{% endblock %}
 
 {% block content %}
 
@@ -8,22 +8,42 @@
 <p class="error">{{message}}</p>
 {% endif %}
 
-<p>{{session[6]}}{{session[1]}}</p>
-<p>{{session[2]}}</p>
+<p>{{session[2]}}{{session[0]}}</p>
+<p>{{session[1]}}</p>
 
 <form method="post">
-  <label>Select Student:
-    <select name="student">
-      {% for student in students %}
-      <option value="{{student[0]}}">{{student[1]}}</option>
-      {% endfor %}
-    </select>
+
+  <label>Session Letter:
+    <input type="text" name="session_letter" value="{{session[0]}}">
   </label>
-  <label>
-    <input type="submit">
+
+  <label>Session Time:
+    <input type="text" name="session_time" value="{{session[1]}}">
   </label>
+  <label id="students">Students:
+
+  </label>
+  <input type="button" class="submission" onclick="newField();" value="Add Student">
+  <input class="submission" type="submit" value="Submit">
+
 </form>
 
 <a href="/sessions">Go back</a>
+
+<script type='text/javascript'>
+  existingFields = 1
+  function newField(){
+    var studentsList = document.getElementById("students");
+    //create a new form element
+    var field = document.createElement("input");
+    //give type = 'text' and name = 'student' + incrementing value?
+    field.type = "text";
+    field.name = "student";
+    //existingFields += 1;
+    //insert it into the HTML, in the correct spot
+    studentsList.appendChild(field);
+  }
+  window.onload = newField;
+</script>
 
 {% endblock %}

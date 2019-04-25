@@ -26,9 +26,29 @@
   <label>Session Time:
     <input type="text" name="session_time">
   </label>
-   <input type="submit" value="Submit">
+  
+  <label id="students">Students:</label>
+
+  <input type="button" class="submission" onclick="newField();" value="Add Student">
+  <input class="submission" type="submit" value="Submit">
 </form>
 
 <a href="/sessions">Go back</a>
+
+<script type='text/javascript'>
+  existingFields = 1
+  function newField(){
+    var studentsList = document.getElementById("students");
+    //create a new form element
+    var field = document.createElement("input");
+    //give type = 'text' and name = 'student' + incrementing value?
+    field.type = "text";
+    field.name = "student";
+    //existingFields += 1;
+    //insert it into the HTML, in the correct spot
+    studentsList.appendChild(field);
+  }
+  window.onload = newField;
+</script>
 
 {% endblock %}
