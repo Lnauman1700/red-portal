@@ -5,7 +5,7 @@
 {% block content %}
 {% if error %}
 {{ error }}
-{{% end error %}}
+{% endif %}
 <ul>
   {% for session in sessions %}
     <li><a href="/sessions/{{session[0]}}">{{session[6]}}{{session[1]}}</a></li>

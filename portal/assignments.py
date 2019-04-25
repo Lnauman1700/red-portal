@@ -10,7 +10,7 @@ def assignments():
 
     conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM sessions JOIN courses ON sessions.session_id = courses.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
+    cur.execute("SELECT * FROM sessions JOIN courses ON sessions.course_id = courses.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
     sessions = cur.fetchall()
     cur.close()
 
@@ -29,6 +29,9 @@ def assignments():
         JOIN sessions ON courses.course_id = sessions.course_id
         JOIN assignments ON assignments.session_id = sessions.session_id
         WHERE courses.teacher_id = %s
+        ORDER BY 
+            courses.course_number ASC,
+            sessions.letter ASC
     """, (g.user[0],))
     assign = cur.fetchall()
     cur.close()
@@ -41,13 +44,15 @@ def assignments():
     elif request.method == 'POST':
         assignment_name = request.form['assignment_name']
         info = request.form['info']
-        sess_id = request.form['session']
+        sess_id = request.form.get('sess')
+
         if assignment_name is '':
             message = 'assignment name fields required'
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
 
         elif sess_id is '':
             message = 'Session required'
+
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
 
         if message is None:
@@ -64,15 +69,12 @@ def assignments():
 @login_required
 def assignment_update(id):
     conn = db.get_db()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM assignments WHERE assignment_id = %s', (id,))
-    assignment = cur.fetchone()
-    cur.close()
 
     cur = conn.cursor()
     cur.execute("""
         SELECT  assignments.assignment_id,
                 assignments.assignment_name,
+                courses.teacher_id,
                 courses.course_name,
                 courses.course_number,
                 users.email,
@@ -85,7 +87,23 @@ def assignment_update(id):
         JOIN assignments ON assignments.session_id = sessions.session_id
         WHERE courses.teacher_id = %s
     """, (g.user[0],))
-    assign = cur.fetchone()
+    assign = cur.fetchall()
+    cur.close()
+
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT  assignments.assignment_id,
+                assignments.assignment_name,
+                assignments.assignment_info,
+                courses.teacher_id,
+                courses.course_number,
+                sessions.letter
+        FROM courses
+        JOIN users ON courses.teacher_id = users.id
+        JOIN sessions ON courses.course_id = sessions.course_id
+        JOIN assignments ON assignments.session_id = sessions.session_id 
+        WHERE assignments.assignment_id = %s""", (id,))
+    assignment= cur.fetchone()
     cur.close()
 
     error = None
@@ -98,9 +116,13 @@ def assignment_update(id):
             message = 'You are not permitted to view this page'
             return make_response(render_template('error_page.html', message=message), 401)
 
-        # elif assign[4] != g.user[0]:
-        #     message = 'You are not permitted to view this page'
-        #     return make_response(render_template('error_page.html', message=message), 401)
+        elif assignment is None:
+            message = 'You are not permitted to view this page'
+            return make_response(render_template('error_page.html', message=message), 401)
+
+        elif assignment[3] != g.user[0]:
+            message = 'You are not permitted to view this page'
+            return make_response(render_template('error_page.html', message=message), 401)
 
         else:
             return render_template('update_assignments.html', assignment=assignment, error=error)
