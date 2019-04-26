@@ -1,18 +1,19 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}My Courses{% endblock %}
+{% block title %}Assignments{% endblock %}
 
 {% block content %}
   <article class="pretty_Table">
+    <h2>{{course_info[0]}} {{course_info[1]}}{{course_info[2]}}</h2>
     <table>
       <tr>
       {% for item in table_headers %}
-        <th class="pretty_Table">{{item}}</th>
+        <th class="pretty_Table ">{{item}}</th>
       {% endfor %}
       </tr>
       {% for item in table %}
       <tr>
-        <td class="pretty_Table_tborders"><a href="/my_assignments/{{item[6]}}">{{item[0]}} {{item[1]}}{{item[2]}}</a></td>
+        <td class="pretty_Table_tborders"><a href="/placeholder}">{{item[0]}} {{item[1]}}{{item[2]}}</a></td>
         <td class="pretty_Table_tborders">{{item[3]}}</td>
         <td class="pretty_Table_tborders">{{item[4]}}</td>
       </tr>
