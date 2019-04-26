@@ -42,4 +42,7 @@ def create_app(test_config=None):
     from . import assignments
     app.register_blueprint(assignments.bp)
 
+    from . import add_grades
+    app.register_blueprint(add_grades.bp)
+
     return app
