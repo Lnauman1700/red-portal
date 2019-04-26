@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}Update {{assignment[2]}}{% endblock %}
+
+
+{% block content %}
+{% if message %}
+  <p>{{ message }}</p>
+{% endif %}
+  <form method='POST'>
+
+    <label for="assignment">assignment Name
+      <input type="text" name="assignment" value="{{assignment[1]}}"/>
+    </label>
+    <label for="Info">Info
+        <textarea class='assignment-info' name="info">{{assignment[2]}}</textarea>
+    </label>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

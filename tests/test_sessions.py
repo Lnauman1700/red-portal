@@ -50,7 +50,7 @@ def test_session_route(client, auth):
             session_time='4:00 - 6:00 MWF',
             student='student@stevenscollege.edu',
         ))
-        assert b'Session successfuly updated' in response.data
+        assert b'Session successfully updated' in response.data
         assert b'CSET 155B' in response.data
         assert b'4:00 - 6:00 MWF' in response.data
 
@@ -70,7 +70,7 @@ def test_session_route(client, auth):
             session_time='This time will show up',
             student='',
         ))
-        assert b'Session successfuly updated' in response.data
+        assert b'Session successfully updated' in response.data
         assert b'CSET 155P' in response.data
         assert b'This time will show up' in response.data
 
@@ -95,7 +95,7 @@ def test_session_create(client, auth):
         session_time='2:00 - 2:40 MWF',
         student='',
     ))
-    assert b'Session successfuly created' in response.data
+    assert b'Session successfully created' in response.data
     response = client.get('/sessions')
     assert b'CSET 155C' in response.data
 
@@ -106,7 +106,7 @@ def test_session_create(client, auth):
         session_time='2:00 - 2:40 MWF',
         student='student@stevenscollege.edu',
     ))
-    assert b'Session successfuly created' in response.data
+    assert b'Session successfully created' in response.data
     response = client.get('/sessions')
     assert b'CSET 155O' in response.data
 

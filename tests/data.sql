@@ -17,3 +17,6 @@ VALUES ('A', '2:00 - 4:20 MF', 1),
 INSERT INTO users_sessions (student, session)
 VALUES (2, 2),
        (2, 3);
+
+INSERT INTO assignments (session_id, assignment_name, assignment_info)
+VALUES (1,'Delete Database', 'Work with postgres SQL');

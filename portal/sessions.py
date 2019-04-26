@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, g, make_response
+from flask import Flask, render_template, request, Blueprint, g, redirect, url_for, make_response
 
 from . import db
 from portal.auth import login_required
@@ -13,12 +13,12 @@ def sessions_index():
             message = 'You are not permitted to view this page'
             return make_response(render_template('error_page.html', message=message), 401)
         else:
+
             # all of the sessions/create html stuff goes into here
             with db.get_db() as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT * FROM sessions JOIN courses ON courses.course_id = sessions.course_id WHERE courses.teacher_id = %s;", (g.user[0],))
                     sessions = cur.fetchall()
-
             return render_template('sessions_list.html', sessions=sessions)
 
 @bp.route('/sessions/<int:id>', methods=['GET', 'POST'])
@@ -33,9 +33,10 @@ def sessions_add(id):
             session = cur.fetchone()
 
     if request.method == 'GET':
+        # display session info
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
-            return make_response(render_template('error_page.html', message=message), 401)
+            return render_template('error_page.html', message=message)
         else:
             # if session doesn't exist, then throw error
             if session is None:
@@ -75,7 +76,7 @@ def sessions_add(id):
                     with conn.cursor() as cur:
                         cur.execute("UPDATE sessions SET letter = %s, session_time = %s WHERE session_id = %s", (session_letter, session_time, id))
                         conn.commit()
-                message = "Session successfuly updated"
+                message = "Session successfully updated"
                 # add the students to the newly-made session (query up the session id of the recently added session)
                 for student in students:
                     if student is not "":
@@ -100,10 +101,10 @@ def sessions_add(id):
 
             return render_template('session_add.html', session=session, message=message)
 
-
 @bp.route('/sessions/create', methods=['GET', 'POST'])
 @login_required
 def create_session():
+
 
     with db.get_db() as conn:
         with conn.cursor() as cur:
@@ -114,7 +115,7 @@ def create_session():
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
-            return make_response(render_template('error_page.html', message=message), 401)
+            return render_template('error_page.html', message=message)
         else:
             return render_template('session_create.html', courses=courses)
 
@@ -124,9 +125,9 @@ def create_session():
         course_id = request.form['course_id']
         students = request.form.getlist('student')
 
-        if course_id is "" or session_letter is "" or session_time is "":
+        if session_letter is "" or session_time is "" or course_id is "":
             message = "Please complete entire form"
-            return render_template('session_create.html', courses=courses, message=message)
+            return render_template('session_create.html', message=message, courses=courses)
         elif len(session_letter) > 1:
             message = "Form was incorrectly filled out"
             return render_template('session_create.html', courses=courses, message=message)
@@ -151,7 +152,7 @@ def create_session():
                         conn.commit()
                         cur.execute("SELECT session_id FROM sessions ORDER BY session_id DESC")
                         session_id = cur.fetchone()
-                message = "Session successfuly created"
+                message = "Session successfully created"
                 # add the students to the newly-made session (query up the session id of the recently added session)
                 for student in students:
                     if student is not "":
