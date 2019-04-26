@@ -8,7 +8,7 @@ bp = Blueprint('courses', __name__)
 @bp.route('/courses', methods=('GET', 'POST'))
 @login_required
 def courses():
-    error = None
+    message = None
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
@@ -25,11 +25,11 @@ def courses():
                 course_data = cur.fetchone()
 
         if course_data is not None:
-            error = 'Course number already exists'
+            message = 'Course number already exists'
         elif course_number is '' or course is '':
-            error = 'Course Number and Course fields required'
+            message = 'Course Number and Course fields required'
 
-        if error is None:
+        if message is None:
             with db.get_db() as conn:
                 with conn.cursor() as cur:
                     cur.execute("INSERT INTO courses (teacher_id,course_number,course_name, course_info) VALUES (%s,%s,%s,%s)", (int(g.user[0]),course_number,course,info,))
@@ -40,7 +40,7 @@ def courses():
             rows = cur.fetchall()
 
 
-    return render_template('courses.html', rows=rows, error=error)
+    return render_template('courses.html', rows=rows, message=message)
 
 @bp.route('/courses/<int:id>', methods=('GET', 'POST'))
 @login_required
@@ -51,7 +51,7 @@ def update(id):
     course = cur.fetchone()
     cur.close()
 
-    error = None
+    message = None
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
@@ -66,7 +66,7 @@ def update(id):
             return make_response(render_template('error_page.html', message=message), 401)
 
         else:
-            return render_template('update.html', course=course, error=error)
+            return render_template('update.html', course=course, message=message)
 
     elif request.method == 'POST':
         course_number = request.form['course_number']
@@ -79,12 +79,12 @@ def update(id):
         cur.close()
         if course_data is not None:
             if course_data[0] != id:
-                error = 'Course number already exists'
+                message = 'Course number already exists'
 
         elif course_number is '' or course is '':
-            error = 'Course Number and Course fields required'
-
-        if error is None:
+            message = 'Course Number and Course fields required'
+        
+        if message is None:
             cur = conn.cursor()
             cur.execute("UPDATE courses SET course_number = %s, course_name = %s, course_info = %s WHERE course_id = %s", (course_number,course_name,info,id))
             conn.commit()
@@ -92,4 +92,4 @@ def update(id):
 
             return redirect(url_for('.courses'))
 
-    return render_template('update.html', course=course, error=error)
+    return render_template('update.html', course=course, message=message)

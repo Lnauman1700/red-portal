@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}My Courses{% endblock %}
+
+{% block content %}
+  <article class='my_courses_page'>
+    <table>
+      <tr>
+      {% for item in table_headers %}
+        <th class="my_courses_page">{{item}}</th>
+      {% endfor %}
+      </tr>
+      {% for item in table %}
+      <tr>
+        <td class="my_courses_page_tborders">{{item[0]}} {{item[1]}}{{item[2]}}</td>
+        <td class="my_courses_page_tborders">{{item[3]}}</td>
+        <td class="my_courses_page_tborders">{{item[4]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </article>
+{% endblock %}

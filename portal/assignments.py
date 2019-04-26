@@ -106,7 +106,8 @@ def assignment_update(id):
     assignment= cur.fetchone()
     cur.close()
 
-    error = None
+    message = None
+
     if request.method == 'GET':
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
@@ -125,7 +126,7 @@ def assignment_update(id):
             return make_response(render_template('error_page.html', message=message), 401)
 
         else:
-            return render_template('update_assignments.html', assignment=assignment, error=error)
+            return render_template('update_assignments.html', assignment=assignment, message=message)
 
     elif request.method == 'POST':
         assignment_name = request.form['assignment']
@@ -135,11 +136,11 @@ def assignment_update(id):
             message = 'assignment name fields required'
             return (render_template('update_assignments.html', message=message, assignment=assignment))
 
-        if error is None:
+        if message is None:
             cur = conn.cursor()
             cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s WHERE assignment_id = %s", (assignment_name,info,id))
             conn.commit()
             cur.close()
             return redirect(url_for('.assignments'))
 
-    return render_template('update_assignments.html', assignment=assignment, error=error)
+    return render_template('update_assignments.html', assignment=assignment, message=message)

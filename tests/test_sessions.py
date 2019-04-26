@@ -44,17 +44,35 @@ def test_session_route(client, auth):
         assert b'<p>CSET 155A</p>' in response.data
         assert b'<p>2:00 - 4:20 MF</p>' in response.data
 
-        # if you put in existing student, give success message and bounce back to session page
+        # putting in new data displays a success, also shows that data in the page
         response = client.post('/sessions/1', data=dict(
-            student=2
+            session_letter='B',
+            session_time='4:00 - 6:00 MWF',
+            student='student@stevenscollege.edu',
         ))
-        assert b'Student successfully added' in response.data
+        assert b'Session successfully updated' in response.data
+        assert b'CSET 155B' in response.data
+        assert b'4:00 - 6:00 MWF' in response.data
 
-        # if you put in student who doesn't exist, bounce back to page and give error message
+        # if you put in student who doesn't exist, give error message and don't replace anything
         response = client.post('/sessions/1', data=dict(
-            student=2
+            session_letter='P',
+            session_time='This time wont show up',
+            student='not@student',
         ))
-        assert b'Student is already in this session' in response.data
+        assert b'A student with the email not@student does not exist' in response.data
+        assert b'CSET 155B' in response.data
+        assert b'4:00 - 6:00 MWF' in response.data
+
+        #if you add in one or more blank students, the code still runs
+        response = client.post('/sessions/1', data=dict(
+            session_letter='P',
+            session_time='This time will show up',
+            student='',
+        ))
+        assert b'Session successfully updated' in response.data
+        assert b'CSET 155P' in response.data
+        assert b'This time will show up' in response.data
 
     with client:
         response = client.get('/sessions/79')
@@ -69,11 +87,34 @@ def test_session_create(client, auth):
     #form shows up when route is acessed
     response = client.get('/sessions/create')
     assert b'<label>Session Letter:' in response.data
+
+    # adding in a new session with blank student fields should work
     response = client.post('/sessions/create', data=dict(
         course_id=1,
         session_letter='C',
-        session_time='H'
+        session_time='2:00 - 2:40 MWF',
+        student='',
     ))
     assert b'Session successfully created' in response.data
     response = client.get('/sessions')
     assert b'CSET 155C' in response.data
+
+    # adding in a new session with students who exist should work
+    response = client.post('/sessions/create', data=dict(
+        course_id=1,
+        session_letter='O',
+        session_time='2:00 - 2:40 MWF',
+        student='student@stevenscollege.edu',
+    ))
+    assert b'Session successfully created' in response.data
+    response = client.get('/sessions')
+    assert b'CSET 155O' in response.data
+
+    # making a new session with students who don't exist shouldn't work
+    response = client.post('/sessions/create', data=dict(
+        course_id=1,
+        session_letter='H',
+        session_time='2:00 - 2:40 MWF',
+        student='not@student',
+    ))
+    assert b'A student with the email not@student does not exist' in response.data

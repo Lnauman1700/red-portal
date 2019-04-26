@@ -14,22 +14,58 @@
     {% endblock %}
   </head>
   <body>
-    <header>
-      <div class="header">
-        <h1>{{ self.title() }}</h1>
-        <img src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
-      </div>
-    </header>
+    <div>
+      <header>
+        <div class="header">
+          <h1>{{ self.title() }}</h1>
+          <img class="logo_img" src="../static/images/thaddeus_logo.png" alt="Thaddeus Stevens Logo"/>
+        </div>
+      </header>
 
+      {% block logout %}
+      <div class="dropdown">
+        <img class="logout" src="../static/images/profile_icon.png" alt="User logo"/>
+        <div class="dropdown-content">
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+      {% endblock %}
+      {% block nav %}
+      {% if g.user[3] == 'teacher' %}
+      <nav>
+        <ul>
+          <li class="pretty_li"><a class="pretty_anchor" href="/home">Home</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/courses">Courses</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/sessions">Sessions</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/assignments">Assignments</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">News</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">About</a></li>
+        </ul>
+      </nav>
+      {% endif %}
+      {% if g.user[3] == 'student' %}
+      <nav>
+        <ul>
+          <li class="pretty_li"><a class="pretty_anchor" href="/home">Home</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="/my_courses">Courses</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">News</a></li>
+          <li class="pretty_li"><a class="pretty_anchor" href="placeholder">About</a></li>
+        </ul>
+      </nav>
+      {% endif %}
+      {% endblock %}
+    </div>
     <main>
       {% block content %}{% endblock %}
     </main>
 
     <footer>
-      <h2>Thaddeus Stevens College of Technology</h2>
-      <address>
+      <h2 class="footer_left">Thaddeus Stevens College of Technology</h2>
+      <address class="footer_right">
+        <h2>Adress</h2>
         <p>750 E King St</p>
         <p>Lancaster, PA 17602</p>
+        <h2>Phone</h2>
         <p><a href="tel:1-717-299-7701">717.299.7701</a></p>
       </address>
     </footer>

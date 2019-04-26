@@ -58,11 +58,12 @@ def test_course_update(client, auth):
         'course_number': '',
         'info': 'h',
     })
+    print(other.data)
     assert b'<p>Course Number and Course fields required</p>' in other.data
 
 def test_errors(client, auth):
     auth.login()
-    response = client.get("/courses/2")
+    response = client.get("/courses/270")
 
     assert b'<h1>Oh no!</h1>' in response.data
     assert b'<p>Page not found</p>' in response.data

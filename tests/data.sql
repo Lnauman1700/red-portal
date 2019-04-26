@@ -6,14 +6,17 @@ VALUES ('teacher@stevenscollege.edu', 'pbkdf2:sha256:150000$nZcp3TLl$66257bad527
        ('teacher2@stevenscollege.edu', 'pbkdf2:sha256:150000$qE6Fp30k$d2d0dbc4ebdcd6fc8ac2c7e656ecd80eff7fcc02a3d3402ddb4b58c97b48a2f5', 'teacher');
 
 INSERT INTO courses (teacher_id,course_number,course_name, course_info)
-VALUES (1, 'CSET 155', 'Database', 'Work with postgres SQL');
+VALUES (1, 'CSET 155', 'Database', 'Work with postgres SQL'),
+       (3, 'WET 000', 'Water', 'Waaaaaaater');
 
 INSERT INTO sessions (letter, session_time, course_id)
 VALUES ('A', '2:00 - 4:20 MF', 1),
-       ('B', '3:00-3:30 MTWHF', 1);
+       ('B', '3:00-3:30 MTWHF', 1),
+       ('A', '6:00-8:00 MWF', 2);
+
+INSERT INTO users_sessions (student, session)
+VALUES (2, 2),
+       (2, 3);
 
 INSERT INTO assignments (session_id, assignment_name, assignment_info)
 VALUES (1,'Delete Database', 'Work with postgres SQL');
-
-
-

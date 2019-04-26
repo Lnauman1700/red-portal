@@ -4,11 +4,15 @@
 
 {% block content %}
 
-{% if error %}
-<p>{{error}}</p>
+{% if message %}
+<p>{{message}}</p>
 {% endif %}
 
+{% block logout %}
+{% endblock %}
 
+{% block nav %}
+{% endblock %}
   <form method="post">
     <label for="email">Email
       <input type="email" name="email" />

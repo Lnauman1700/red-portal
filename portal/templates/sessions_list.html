@@ -3,8 +3,8 @@
 {% block title %}My Sessions{% endblock %}
 
 {% block content %}
-{% if error %}
-{{ error }}
+{% if message %}
+{{ message }}
 {% endif %}
 <ul>
   {% for session in sessions %}
