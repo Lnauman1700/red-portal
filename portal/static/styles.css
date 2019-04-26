@@ -121,36 +121,46 @@ nav a {
 .current_page {
   background-color: #802842;
 }
+
 /**
- * This css is for the 'my_courses'page
+ * This is styling for tables
  */
 
-.my_courses_page article {
+.pretty_Table {
   position: relative;
 }
 
-.my_courses_page table {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  border: 1px solid black;
+.pretty_Table table {
+   margin-left: auto;
+   margin-right: auto;
+   text-align: center;
+   border: 1px solid black;
 }
 
-.my_courses_page th {
+.pretty_Table h2 {
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: auto;
+   text-align: center;
+}
+
+.pretty_Table th {
   border-bottom: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
 
-.my_courses_page_tborders {
+.pretty_Table_tborders {
   border-left: 1px solid black;
 }
 
 tr:nth-of-type(odd) {
   background-color: #E5E5E5;
 }
-/**
- * Layout
+
+
+
+ /* Layout
  */
 body {
   justify-content: space-between;

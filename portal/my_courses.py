@@ -21,7 +21,7 @@ def my_courses():
     # we should display the course number and course name as well
     # display who the teacher is as well
     cur.execute("""
-        SELECT courses.course_name, courses.course_number, sessions.letter, users.email, sessions.session_time, users_sessions.student
+        SELECT courses.course_name, courses.course_number, sessions.letter, users.email, sessions.session_time, users_sessions.student, sessions.session_id
         FROM courses
         JOIN sessions ON courses.course_id = sessions.course_id
         JOIN users ON courses.teacher_id = users.id
@@ -29,6 +29,5 @@ def my_courses():
         WHERE users_sessions.student = %s;
     """, (g.user[0],))
     table = cur.fetchall()
-    print(table)
 
     return render_template('my_courses.html', table=table, table_headers=table_headers)
