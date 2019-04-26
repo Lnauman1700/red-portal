@@ -21,4 +21,5 @@ VALUES (2, 2),
        (2, 3);
 
 INSERT INTO assignments (session_id, assignment_name, assignment_info)
-VALUES (1,'Delete Database', 'Work with postgres SQL');
+VALUES (1,'Delete Database', 'Work with postgres SQL'),
+       (2,'Delete Database', 'Work with postgres SQL');

@@ -17,3 +17,13 @@ def test_validation_my_assignments(client, auth):
         response = client.get('/my_assignments/2')
         assert response.status_code == 200
         assert b'CSET 155B' in response.data
+        response = client.get('/my_assignments/100')
+        assert response.status_code == 401
+        assert b'You are not permitted to view this page' in response.data
+
+def test_view_assignments(client, auth):
+    with client:
+        auth.login('student@stevenscollege.edu','asdfgh')
+        response = client.get('/my_assignments/2')
+        assert b'Delete Database' in response.data
+        assert b'Work with postgres SQL' in response.data

@@ -11,13 +11,14 @@
         <th class="pretty_Table ">{{item}}</th>
       {% endfor %}
       </tr>
-      {% for item in table %}
+      {% for item in assign_info %}
       <tr>
-        <td class="pretty_Table_tborders"><a href="/placeholder}">{{item[0]}} {{item[1]}}{{item[2]}}</a></td>
+        <td class="pretty_Table_tborders">{{item[2]}}</td>
         <td class="pretty_Table_tborders">{{item[3]}}</td>
-        <td class="pretty_Table_tborders">{{item[4]}}</td>
+        <td class="pretty_Table_tborders"><!--grade--></td>
       </tr>
       {% endfor %}
+
     </table>
   </article>
 {% endblock %}
