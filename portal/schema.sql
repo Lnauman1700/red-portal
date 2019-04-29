@@ -39,8 +39,10 @@ CREATE TABLE assignments(
 	assignment_id bigserial PRIMARY KEY,
 	session_id bigint REFERENCES sessions (session_id),
 	assignment_name text NOT NULL,
-	assignment_info text
+	assignment_info text,
+  assignment_type text
 );
+
 
 -- CREATE TABLE grades (
 --     id bigserial PRIMARY KEY,

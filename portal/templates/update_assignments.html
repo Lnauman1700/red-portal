@@ -9,7 +9,12 @@
   <p>{{ message }}</p>
 {% endif %}
   <form method='POST'>
-
+    <label>Select Assignment Type:
+        <select name="type">
+          <option value="standard">Standard</option>
+          <option value="file">File Upload</option>
+        </select>
+      </label>
     <label for="assignment">assignment Name
       <input type="text" name="assignment" value="{{assignment[1]}}"/>
     </label>

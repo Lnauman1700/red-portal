@@ -19,16 +19,20 @@
           {% endfor %}
         </select>
       </label>
+      <label>Select Assignment Type:
+          <select name="type">
+            <option value="standard">Standard</option>
+            <option value="file">File Upload</option>
+          </select>
+        </label>
     <label for="assignment_name">Assignment Name
       <input type="text" name="assignment_name" />
     </label>
-
     <label for="Info">Info
       <textarea class='assignment-info' name="info" ></textarea>
     </label>
     <input type="submit" value="Submit" />
   </form>
-
 
   <h2>Edit Assignment</h2>
   <ul>
