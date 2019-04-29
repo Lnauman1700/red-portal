@@ -13,8 +13,6 @@ def grades(assignment_id):
         with conn.cursor() as cur:
             cur.execute("SELECT courses.teacher_id, assignments.assignment_id FROM assignments JOIN sessions ON assignments.session_id = sessions.session_id JOIN courses ON courses.course_id = sessions.course_id WHERE assignments.assignment_id = %s", (assignment_id,))
             assignment = cur.fetchone()
-
-    # TODO
     # GET
     if request.method == 'GET':
         # make sure user accessing it is a teacher
