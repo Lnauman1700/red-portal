@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS grades;
+DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS users_sessions;
 DROP TABLE IF EXISTS sessions;
@@ -42,11 +42,20 @@ CREATE TABLE assignments(
 	assignment_info text
 );
 
-CREATE TABLE grades (
+-- CREATE TABLE grades (
+--     id bigserial PRIMARY KEY,
+--     assignment_id bigint REFERENCES assignments (assignment_id),
+--     student_id bigint REFERENCES users (id),
+--     grade decimal NOT NULL,
+--     letter varchar(1),
+--     CONSTRAINT unique_assignment_student UNIQUE (assignment_id, student_id)
+-- );
+
+CREATE TABLE submissions (
     id bigserial PRIMARY KEY,
     assignment_id bigint REFERENCES assignments (assignment_id),
     student_id bigint REFERENCES users (id),
-    grade decimal NOT NULL,
+    points smallint NOT NULL,
     letter varchar(1),
     CONSTRAINT unique_assignment_student UNIQUE (assignment_id, student_id)
 );

@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}Grades{% endblock %}
+
+
+{% block content %}
+{% if message %}
+  <p>{{ message }}</p>
+{% endif %}
+  <form method='POST'>
+    {% for student in students %}
+      <label>{{student[1]}}
+        <input type="number" name="{{student[0]}}">
+      </label>
+    {% endfor %}
+    <input type="submit">
+  </form>
+
+{% endblock %}
