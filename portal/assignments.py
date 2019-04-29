@@ -29,7 +29,7 @@ def assignments():
         JOIN sessions ON courses.course_id = sessions.course_id
         JOIN assignments ON assignments.session_id = sessions.session_id
         WHERE courses.teacher_id = %s
-        ORDER BY 
+        ORDER BY
             courses.course_number ASC,
             sessions.letter ASC
     """, (g.user[0],))
@@ -45,6 +45,7 @@ def assignments():
         assignment_name = request.form['assignment_name']
         info = request.form['info']
         sess_id = request.form.get('sess')
+        assignment_type = request.form['type']
 
         if assignment_name is '':
             message = 'assignment name fields required'
@@ -52,12 +53,11 @@ def assignments():
 
         elif sess_id is '':
             message = 'Session required'
-
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
 
         if message is None:
             cur = conn.cursor()
-            cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info) VALUES (%s,%s,%s)", (sess_id, assignment_name, info,))
+            cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info, assignment_type) VALUES (%s,%s,%s,%s)", (sess_id, assignment_name, info, assignment_type,))
             conn.commit()
             cur.close()
             return redirect(url_for('.assignments'))
@@ -101,7 +101,7 @@ def assignment_update(id):
         FROM courses
         JOIN users ON courses.teacher_id = users.id
         JOIN sessions ON courses.course_id = sessions.course_id
-        JOIN assignments ON assignments.session_id = sessions.session_id 
+        JOIN assignments ON assignments.session_id = sessions.session_id
         WHERE assignments.assignment_id = %s""", (id,))
     assignment= cur.fetchone()
     cur.close()
@@ -131,6 +131,7 @@ def assignment_update(id):
     elif request.method == 'POST':
         assignment_name = request.form['assignment']
         info = request.form['info']
+        assignment_type = request.form['type']
 
         if assignment_name is '':
             message = 'assignment name fields required'
@@ -138,7 +139,7 @@ def assignment_update(id):
 
         if message is None:
             cur = conn.cursor()
-            cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s WHERE assignment_id = %s", (assignment_name,info,id))
+            cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s, assignment_type = %s WHERE assignment_id = %s", (assignment_name,info,assignment_type,id))
             conn.commit()
             cur.close()
             return redirect(url_for('.assignments'))
