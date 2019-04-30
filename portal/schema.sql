@@ -40,7 +40,8 @@ CREATE TABLE assignments(
 	session_id bigint REFERENCES sessions (session_id),
 	assignment_name text NOT NULL,
 	assignment_info text,
-  assignment_type text
+  assignment_type text,
+  total_points smallint
 );
 
 

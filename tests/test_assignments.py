@@ -17,8 +17,9 @@ def test_creating_assignment(client, auth):
         'assignment_name': '',
         'info': 'h',
         'type': 'file',
+        'points': 56,
         })
-        assert b'<p>assignment name fields required</p>' in response.data
+        assert b'<p>assignment name and total points fields required</p>' in response.data
         assert 200 == response.status_code
         assert b"<form method='POST'>" in response.data
         response = client.post('/assignments', data={
@@ -26,6 +27,7 @@ def test_creating_assignment(client, auth):
         'assignment_name': 'Test This statement',
         'info': 'h',
         'type': 'file',
+        'points': 56,
         })
         assert response.status_code == 302
         response = client.get('/assignments')
@@ -58,8 +60,9 @@ def test_course_update(client, auth):
             'assignment': '',
             'info': 'h',
             'type': 'file',
+            'points': 700,
         })
-        assert b'<p>assignment name fields required</p>' in response.data
+        assert b'<p>assignment name and total points fields required</p>' in response.data
         assert 200 == response.status_code
 
         assert b"<form method='POST'>" in response.data
@@ -68,6 +71,7 @@ def test_course_update(client, auth):
             'assignment': 'Test This statement',
             'info': 'h',
             'type': 'file',
+            'points': 700,
             })
         assert response.status_code == 302
         response = client.get('/assignments')

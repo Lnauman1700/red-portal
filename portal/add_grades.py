@@ -38,13 +38,14 @@ def grades(assignment_id):
     if request.method == 'POST':
         with db.get_db() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT users_sessions.student, users.email FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id JOIN submissions ON submissions.assignment_id = assignments.assignment_id WHERE assignments.assignment_id = %s", (assignment_id,))
+                cur.execute("SELECT users_sessions.student, users.email FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id WHERE assignments.assignment_id = %s", (assignment_id,))
                 students = cur.fetchall()
         # query all students in this session
         # for each student in this session, grab their student id from the db
         for student in students:
             # check that the id is in the request.form
             student_grade = request.form[f'{student[0]}']
+            print(student_grade)
             # if there's already a submission for the user in the assignment, let's update it
             with db.get_db() as conn:
                 with conn.cursor() as cur:

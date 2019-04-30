@@ -23,3 +23,7 @@ VALUES (2, 2),
 INSERT INTO assignments (session_id, assignment_name, assignment_info)
 VALUES (1,'Delete Database', 'Work with postgres SQL'),
        (2,'Delete Database', 'Work with postgres SQL');
+
+INSERT INTO submissions (assignment_id, student_id, points, letter)
+VALUES (1, 4, 900, 'A'),
+       (1, 2, 900, 'A');
