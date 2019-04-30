@@ -18,10 +18,18 @@ def my_assignments(id):
             cur.execute("SELECT * FROM users_sessions WHERE student = %s AND session = %s", (g.user[0], id,))
             auth = cur.fetchone()
 
+    # Write query to access all grades specific to student ID and session  ID for average
+
+    # with db.get_db() as conn:
+    #     with conn.cursor() as cur:
+    #         cur.execute("SELECT * FROM grades WHERE student_id = %s AND session_id = %s", (g.user[0], id,))
+    #         all_grades = cur.fetchall()
+
     if course_info == None:
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
+    #join grades table to display grades for specific assignments 
     with db.get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM assignments WHERE session_id = %s", (course_info[3],))
