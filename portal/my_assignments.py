@@ -35,6 +35,39 @@ def my_assignments(id):
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
-    table_headers = ["Assignment", "Description", "Grade"]
+    table_headers = ["Assignment", "Grade"]
 
     return render_template('my_assignments.html', course_info=course_info, table_headers=table_headers, assign_info=assign_info)
+
+
+@bp.route('/my_assignments/assignment_description/<int:id>')
+@login_required
+def assignment_description(id):
+
+    with db.get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM assignments where assignment_id = %s", (id,))
+            assignment_desc = cur.fetchone()
+
+    if assignment_desc == None:
+        message = 'You are not permitted to view this page'
+        return make_response(render_template('error_page.html', message=message), 401)
+
+
+    with db.get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM users_sessions WHERE student = %s AND session = %s", (g.user[0], assignment_desc[1],))
+            auth = cur.fetchone()
+
+
+    if g.user[3] == 'teacher':
+        message = 'You are not permitted to view this page'
+        return make_response(render_template('error_page.html', message=message), 401)
+
+
+    elif auth == None:
+        message = 'You are not permitted to view this page'
+        return make_response(render_template('error_page.html', message=message), 401)
+
+
+    return render_template('assignment_description.html', assignment_desc=assignment_desc)

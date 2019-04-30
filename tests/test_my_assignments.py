@@ -21,9 +21,41 @@ def test_validation_my_assignments(client, auth):
         assert response.status_code == 401
         assert b'You are not permitted to view this page' in response.data
 
+
 def test_view_assignments(client, auth):
+
     with client:
         auth.login('student@stevenscollege.edu','asdfgh')
         response = client.get('/my_assignments/2')
         assert b'Delete Database' in response.data
+
+
+##
+# Testing the assignment description page
+##
+
+
+def test_validation_assignment_description(client, auth):
+
+    with client:
+        response = client.get('/my_assignments/assignment_description/2')
+        assert response.headers['Location'] == 'http://localhost/'
+    with client:
+        auth.login("student_2@stevenscollege.edu", "x")
+        response = client.get('/my_assignments/assignment_description/2')
+        assert response.status_code == 401
+        assert b'You are not permitted to view this page' in response.data
+    with client:
+        auth.login()
+        response = client.get('/my_assignments/assignment_description/2')
+        assert response.status_code == 401
+        assert b'You are not permitted to view this page' in response.data
+    with client:
+        auth.login('student@stevenscollege.edu','asdfgh')
+        response = client.get('/my_assignments/assignment_description/2')
+        assert response.status_code == 200
+        assert b'Delete Database' in response.data
         assert b'Work with postgres SQL' in response.data
+        response = client.get('/my_assignments/assignment_description/100')
+        assert response.status_code == 401
+        assert b'You are not permitted to view this page' in response.data
