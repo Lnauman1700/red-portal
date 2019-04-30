@@ -3,8 +3,21 @@
 {% block title %}Your Assignment{% endblock %}
 
 {% block content %}
-  <article>
-    <h1>{{assignment_desc[2]}}</h1>
-    <p>{{assignment_desc[3]}}</p>
-  </article>
+
+<article>
+  <h1>{{assignment_desc[2]}}</h1>
+  <p>{{assignment_desc[3]}}</p>
+</article>
+
+{% if message %}
+  <p>{{message}}</p>
+{% endif %}
+
+{% if file %}
+<form method = "POST" enctype = "multipart/form-data">
+    <input type = "file" name = "file"/>
+    <input type = "submit"/>
+</form>
+{% endif %}
+
 {% endblock %}

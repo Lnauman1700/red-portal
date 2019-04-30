@@ -1,10 +1,13 @@
-from flask import Flask, render_template, g, request
+from flask import Flask, render_template, g, request, send_from_directory
 
 from portal.auth import login_required
 
+UPLOAD_FOLDER = '/uploads'
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -27,12 +30,15 @@ def create_app(test_config=None):
     from . import sessions
     app.register_blueprint(sessions.bp)
 
-
-
     @app.route('/home')
     @login_required
     def home():
         return render_template('home.html', user=g.user[1])
+
+    @app.route('/uploads/<filename>')
+    @login_required
+    def uploaded_file(filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
     # Importing 'my_courses' Blueprint which is the module rendering 'my_courses' page
     from . import my_courses
