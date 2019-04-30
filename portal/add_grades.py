@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, g, make_response
+from flask import Flask, render_template, request, Blueprint, g, make_response, redirect, url_for
 
 from . import db
 from portal.auth import login_required
@@ -11,7 +11,7 @@ def grades(assignment_id):
 
     with db.get_db() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT courses.teacher_id, assignments.assignment_id FROM assignments JOIN sessions ON assignments.session_id = sessions.session_id JOIN courses ON courses.course_id = sessions.course_id WHERE assignments.assignment_id = %s", (assignment_id,))
+            cur.execute("SELECT courses.teacher_id, assignments.assignment_id, courses.course_number, sessions.letter, assignments.assignment_name FROM assignments JOIN sessions ON assignments.session_id = sessions.session_id JOIN courses ON courses.course_id = sessions.course_id WHERE assignments.assignment_id = %s", (assignment_id,))
             assignment = cur.fetchone()
     # GET
     if request.method == 'GET':
@@ -29,10 +29,20 @@ def grades(assignment_id):
             # grab students in assignment's session, eventually we'll list them out in the HTML
             with db.get_db() as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT users_sessions.student, users.email FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id WHERE assignments.assignment_id = %s", (assignment_id,))
+                    cur.execute("""
+                    SELECT submissions.student_id, users.email, submissions.points FROM submissions
+                    JOIN assignments ON submissions.assignment_id = assignments.assignment_id
+                    JOIN users ON submissions.student_id = users.id
+                    WHERE assignments.assignment_id = %s;
+                    """, (assignment_id,))
                     students = cur.fetchall()
+            if students == []:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT users_sessions.student, users.email FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id WHERE assignments.assignment_id = %s", (assignment_id,))
+                        students = cur.fetchall()
 
-            return render_template('add_grades.html', students=students)
+            return render_template('add_grades.html', students=students, assignment=assignment)
         # make sure assignment id exists, teacher accessing it owns it
     # POST
     if request.method == 'POST':
@@ -45,22 +55,43 @@ def grades(assignment_id):
         for student in students:
             # check that the id is in the request.form
             student_grade = request.form[f'{student[0]}']
-            print(student_grade)
             # if there's already a submission for the user in the assignment, let's update it
             with db.get_db() as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT submissions.student_id, submissions.assignment_id FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id JOIN submissions ON submissions.assignment_id = assignments.assignment_id WHERE submissions.assignment_id = %s AND submissions.student_id = %s", (assignment_id, student[0],))
                     submission = cur.fetchone()
             if submission is None:
-                with db.get_db() as conn:
-                    with conn.cursor() as cur:
-                        cur.execute("INSERT INTO submissions (assignment_id, student_id, points) VALUES (%s, %s, %s)", (assignment_id, student[0], student_grade,))
+                if student_grade == "":
+                    with db.get_db() as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("INSERT INTO submissions (assignment_id, student_id) VALUES (%s, %s)", (assignment_id, student[0]))
+                else:
+                    with db.get_db() as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("INSERT INTO submissions (assignment_id, student_id, points) VALUES (%s, %s, %s)", (assignment_id, student[0], student_grade,))
             # if it's in the request.form and there isn't already data for it, we'll make a new submission
             else:
-                with db.get_db() as conn:
-                    with conn.cursor() as cur:
-                        cur.execute("UPDATE submissions SET points = %s WHERE student_id = %s AND assignment_id = %s", (student_grade, student[0], assignment_id,))
-        return render_template('home.html')
+                if student_grade == "":
+                    with db.get_db() as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("UPDATE submissions SET points = %s WHERE student_id = %s AND assignment_id = %s", (None, student[0], assignment_id,))
+                else:
+                    with db.get_db() as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("UPDATE submissions SET points = %s WHERE student_id = %s AND assignment_id = %s", (student_grade, student[0], assignment_id,))
+
+        # queries updated student info to send in to the page again
+        with db.get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                SELECT submissions.student_id, users.email, submissions.points FROM submissions
+                JOIN assignments ON submissions.assignment_id = assignments.assignment_id
+                JOIN users ON submissions.student_id = users.id
+                WHERE assignments.assignment_id = %s;
+                """, (assignment_id,))
+                students = cur.fetchall()
+
+        return render_template('add_grades.html', students=students, assignment=assignment)
 
 
         # get the data relating to each student's grade

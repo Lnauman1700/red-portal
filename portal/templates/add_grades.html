@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 
-{% block title %}Grades{% endblock %}
+{% block title %}{{assignment[2]}}{{assignment[3]}} - {{assignment[4]}} Grades{% endblock %}
 
 
 {% block content %}
@@ -11,7 +11,7 @@
   <form method='POST'>
     {% for student in students %}
       <label>{{student[1]}}
-        <input type="number" name="{{student[0]}}">
+        <input type="number" name="{{student[0]}}" value="{{student[2]}}">
       </label>
     {% endfor %}
     <input type="submit">

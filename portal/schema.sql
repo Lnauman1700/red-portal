@@ -58,7 +58,7 @@ CREATE TABLE submissions (
     id bigserial PRIMARY KEY,
     assignment_id bigint REFERENCES assignments (assignment_id),
     student_id bigint REFERENCES users (id),
-    points smallint NOT NULL,
+    points smallint,
     letter varchar(1),
     CONSTRAINT unique_assignment_student UNIQUE (assignment_id, student_id)
 );
