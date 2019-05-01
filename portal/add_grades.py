@@ -29,7 +29,7 @@ def grades(assignment_id):
             with db.get_db() as conn:
                 with conn.cursor() as cur:
                     cur.execute("""
-                    SELECT submissions.student_id, users.email, submissions.points FROM submissions
+                    SELECT submissions.student_id, users.email, submissions.points, submissions.letter, assignments.total_points FROM submissions
                     JOIN assignments ON submissions.assignment_id = assignments.assignment_id
                     JOIN users ON submissions.student_id = users.id
                     WHERE assignments.assignment_id = %s;
@@ -85,7 +85,7 @@ def grades(assignment_id):
         with db.get_db() as conn:
             with conn.cursor() as cur:
                 cur.execute("""
-                SELECT submissions.student_id, users.email, submissions.points FROM submissions
+                SELECT submissions.student_id, users.email, submissions.points, submissions.letter, assignments.total_points FROM submissions
                 JOIN assignments ON submissions.assignment_id = assignments.assignment_id
                 JOIN users ON submissions.student_id = users.id
                 WHERE assignments.assignment_id = %s;

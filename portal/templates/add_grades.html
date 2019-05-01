@@ -14,6 +14,13 @@
     {% for student in students %}
       <label>{{student[1]}}
         <input type="number" name="{{student[0]}}" value="{{student[2]}}">
+        {% if student[2] %}
+        Grade: {{student[2]}}/{{student[4]}} {{student[3]}}
+        {% elif student[2] == 0 %}
+        Grade: {{student[2]}}/{{student[4]}} {{student[3]}}
+        {% else %}
+        Grade: None
+        {% endif %}
       </label>
     {% endfor %}
     <input type="submit">
