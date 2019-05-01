@@ -11,11 +11,10 @@ def grades(assignment_id):
 
     with db.get_db() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT courses.teacher_id, assignments.assignment_id, courses.course_number, sessions.letter, assignments.assignment_name FROM assignments JOIN sessions ON assignments.session_id = sessions.session_id JOIN courses ON courses.course_id = sessions.course_id WHERE assignments.assignment_id = %s", (assignment_id,))
+            cur.execute("SELECT courses.teacher_id, assignments.assignment_id, courses.course_number, sessions.letter, assignments.assignment_name, assignments.total_points FROM assignments JOIN sessions ON assignments.session_id = sessions.session_id JOIN courses ON courses.course_id = sessions.course_id WHERE assignments.assignment_id = %s", (assignment_id,))
             assignment = cur.fetchone()
-    # GET
     if request.method == 'GET':
-        # make sure user accessing it is a teacher
+        # make sure user accessing it is a teacher, and owns the course related to the assignment
         if g.user[3] != 'teacher':
             message = 'You are not permitted to view this page'
             return make_response(render_template('error_page.html', message=message), 401)
@@ -36,6 +35,7 @@ def grades(assignment_id):
                     WHERE assignments.assignment_id = %s;
                     """, (assignment_id,))
                     students = cur.fetchall()
+            # if there are no submissions yet, just get a list of the students
             if students == []:
                 with db.get_db() as conn:
                     with conn.cursor() as cur:
@@ -43,14 +43,12 @@ def grades(assignment_id):
                         students = cur.fetchall()
 
             return render_template('add_grades.html', students=students, assignment=assignment)
-        # make sure assignment id exists, teacher accessing it owns it
-    # POST
     if request.method == 'POST':
+        # query all students in this session
         with db.get_db() as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT users_sessions.student, users.email FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id WHERE assignments.assignment_id = %s", (assignment_id,))
                 students = cur.fetchall()
-        # query all students in this session
         # for each student in this session, grab their student id from the db
         for student in students:
             # check that the id is in the request.form
@@ -61,24 +59,27 @@ def grades(assignment_id):
                     cur.execute("SELECT submissions.student_id, submissions.assignment_id FROM users JOIN users_sessions ON users.id = users_sessions.student JOIN sessions ON sessions.session_id = users_sessions.session JOIN assignments ON sessions.session_id = assignments.session_id JOIN submissions ON submissions.assignment_id = assignments.assignment_id WHERE submissions.assignment_id = %s AND submissions.student_id = %s", (assignment_id, student[0],))
                     submission = cur.fetchone()
             if submission is None:
+                # make sure there was info sent through the form, if there wasn't then account for that
                 if student_grade == "":
                     with db.get_db() as conn:
                         with conn.cursor() as cur:
                             cur.execute("INSERT INTO submissions (assignment_id, student_id) VALUES (%s, %s)", (assignment_id, student[0]))
                 else:
+                    letter_grade = get_letter(student_grade, assignment[5])
                     with db.get_db() as conn:
                         with conn.cursor() as cur:
-                            cur.execute("INSERT INTO submissions (assignment_id, student_id, points) VALUES (%s, %s, %s)", (assignment_id, student[0], student_grade,))
+                            cur.execute("INSERT INTO submissions (assignment_id, student_id, points, letter) VALUES (%s, %s, %s, %s)", (assignment_id, student[0], student_grade, letter_grade,))
             # if it's in the request.form and there isn't already data for it, we'll make a new submission
             else:
                 if student_grade == "":
                     with db.get_db() as conn:
                         with conn.cursor() as cur:
-                            cur.execute("UPDATE submissions SET points = %s WHERE student_id = %s AND assignment_id = %s", (None, student[0], assignment_id,))
+                            cur.execute("UPDATE submissions SET points = %s, letter = %s WHERE student_id = %s AND assignment_id = %s", (None, None, student[0], assignment_id,))
                 else:
+                    letter_grade = get_letter(student_grade, assignment[5])
                     with db.get_db() as conn:
                         with conn.cursor() as cur:
-                            cur.execute("UPDATE submissions SET points = %s WHERE student_id = %s AND assignment_id = %s", (student_grade, student[0], assignment_id,))
+                            cur.execute("UPDATE submissions SET points = %s, letter = %s WHERE student_id = %s AND assignment_id = %s", (student_grade, letter_grade, student[0], assignment_id,))
 
         # queries updated student info to send in to the page again
         with db.get_db() as conn:
@@ -94,7 +95,15 @@ def grades(assignment_id):
         return render_template('add_grades.html', students=students, assignment=assignment)
 
 
-        # get the data relating to each student's grade
-        # do something with the unentered ones
-        # make sure student's grade isn't already entered, if it is, update it
-        # add into the DB the grades, student associated with them, ect
+def get_letter(points, total):
+    fraction = int(points)/total
+    if fraction >= 0.90:
+        return 'A'
+    elif fraction >= 0.80:
+        return 'B'
+    elif fraction >= 0.70:
+        return 'C'
+    elif fraction >= 0.60:
+        return 'D'
+    else:
+        return 'F'
