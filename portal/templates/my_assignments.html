@@ -13,8 +13,7 @@
       </tr>
       {% for item in assign_info %}
       <tr>
-        <td class="pretty_Table_tborders">{{item[2]}}</td>
-        <td class="pretty_Table_tborders">{{item[3]}}</td>
+        <td class="pretty_Table_tborders"><a href="/my_assignments/assignment_description/{{item[0]}}">{{item[2]}}</td>
         <td class="pretty_Table_tborders"><!--grade--></td>
       </tr>
       {% endfor %}
