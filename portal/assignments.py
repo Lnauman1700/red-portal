@@ -46,9 +46,10 @@ def assignments():
         info = request.form['info']
         sess_id = request.form.get('sess')
         assignment_type = request.form['type']
+        total_points = request.form['points']
 
-        if assignment_name is '':
-            message = 'assignment name fields required'
+        if assignment_name is '' or total_points is '':
+            message = 'assignment name and total points fields required'
             return (render_template('assignments.html', message=message, sessions=sessions, assign=assign))
 
         elif sess_id is '':
@@ -57,7 +58,7 @@ def assignments():
 
         if message is None:
             cur = conn.cursor()
-            cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info, assignment_type) VALUES (%s,%s,%s,%s)", (sess_id, assignment_name, info, assignment_type,))
+            cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info, assignment_type, total_points) VALUES (%s,%s,%s,%s,%s)", (sess_id, assignment_name, info, assignment_type, total_points))
             conn.commit()
             cur.close()
             return redirect(url_for('.assignments'))
@@ -132,14 +133,15 @@ def assignment_update(id):
         assignment_name = request.form['assignment']
         info = request.form['info']
         assignment_type = request.form['type']
+        total_points = request.form['points']
 
-        if assignment_name is '':
-            message = 'assignment name fields required'
+        if assignment_name is '' or total_points is '':
+            message = 'assignment name and total points fields required'
             return (render_template('update_assignments.html', message=message, assignment=assignment))
 
         if message is None:
             cur = conn.cursor()
-            cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s, assignment_type = %s WHERE assignment_id = %s", (assignment_name,info,assignment_type,id))
+            cur.execute("UPDATE assignments SET assignment_name = %s, assignment_info = %s, assignment_type = %s, total_points = %s WHERE assignment_id = %s", (assignment_name,info,assignment_type,total_points,id,))
             conn.commit()
             cur.close()
             return redirect(url_for('.assignments'))
