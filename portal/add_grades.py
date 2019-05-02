@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, g, make_response, redirect, url_for
+from flask import Flask, render_template, request, Blueprint, g, make_response
 
 from . import db
 from portal.auth import login_required
