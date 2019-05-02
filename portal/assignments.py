@@ -115,7 +115,8 @@ def assignment_update(id):
                 assignments.assignment_info,
                 courses.teacher_id,
                 courses.course_number,
-                sessions.letter
+                sessions.letter,
+                assignments.total_points
         FROM courses
         JOIN users ON courses.teacher_id = users.id
         JOIN sessions ON courses.course_id = sessions.course_id
