@@ -44,7 +44,6 @@ CREATE TABLE assignments(
   total_points smallint
 );
 
-
 -- CREATE TABLE grades (
 --     id bigserial PRIMARY KEY,
 --     assignment_id bigint REFERENCES assignments (assignment_id),
@@ -60,5 +59,6 @@ CREATE TABLE submissions (
     student_id bigint REFERENCES users (id),
     points smallint,
     letter varchar(1),
+    filename text,
     CONSTRAINT unique_assignment_student UNIQUE (assignment_id, student_id)
 );

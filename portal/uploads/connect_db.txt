@@ -1,0 +1,12 @@
+
+1) import module in db.py file
+
+2) make get_db function
+  -connect to database and return
+
+3) make close_db function
+  -close the database
+
+4) set up init_db to clear out and create tables
+
+5) register it with app

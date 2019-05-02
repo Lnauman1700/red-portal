@@ -1,0 +1,64 @@
+Intro:
+ May be tedious and frustrating, but that makes it more rewarding
+ Programming is hard
+ The art of programming is controlling complexity
+
+Chapter 1:
+ value: peice of information
+ type: role of the value
+ operators: used to manipulate values
+ 
+ number: integer, fractional, NaN
+ boolean: true/false
+ string: string of text
+ empty values: null, undefined
+
+ Opperators:
+ unary: typeof
+ logical: &&(and) ||(or) !(bang) 
+ arithmatic: -,+,*,/,%(remainder)
+ comparison: >,<,<=,>=,==,!=,===(percise equals)
+ ternary: _?_:_ 
+
+Chapter 2:
+ expression: fragment of code that produces value
+ statement: block of code that stands on its own
+ side effect: a change that affects the "world"
+ variable: a name that points at a value
+ assignment: thing that connects a value to a variable 
+ function: peice of program wrapped in a value,
+ conditional: only happens if value is tru (if, else)
+ 
+Chapter 3:
+ 
+ annatomy of a function:
+
+  function isEven(x) < argument {
+   ^         ^
+  keyword  binding    
+         
+}
+const myFunc = (x) => {
+
+ enviornment: 
+ scope: 
+  
+
+let obj1 = {
+    name: "Spencer",
+    age: 18
+};
+
+ function definition: A function definition is a regular binding where the value of the binding is a function.
+
+ People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.
+ 
+ "The function keyword, when used as an expression, can create a function value. When used as a statement, it can be used to declare a binding and give it a function as its value."   
+
+
+
+Chapter 4:
+
+ iterative : uses loop and goes through itterations (in list)
+ recursive : do function over and over again until a certain case, and return something else
+

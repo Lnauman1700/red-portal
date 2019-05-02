@@ -78,6 +78,19 @@ def assignment_description(id):
     elif request.method == 'POST':
         file = request.files['file']
         file.save(os.path.join("portal/uploads", file.filename))
+
+        with db.get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM submissions WHERE assignment_id = %s AND student_id = %s", (id, g.user[0],))
+                submission = cur.fetchone()
+        if submission is None:
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("INSERT INTO submissions (assignment_id, student_id, filename) VALUES (%s, %s, %s)", (id, g.user[0], file.filename,))
+        else:
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE submissions SET filename = %s WHERE assignment_id = %s AND student_id = %s", (file.filename, id, g.user[0],))
         message = "file successfully uploaded"
         file = "file"
         return render_template("assignment_description.html", assignment_desc=assignment_desc, file=file, message=message)

@@ -1,7 +1,0 @@
-Agile workflow:
-
--lots of potentially shippable content 
--focus on priorities(buisness)
--client interaction over process+tools
--three rooles: project manager, project owner, everyone else
--taking what user wants and splitting it up into manageable peices 
