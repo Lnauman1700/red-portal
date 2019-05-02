@@ -1,6 +1,6 @@
-from flask import Blueprint, g, render_template, make_response, request, app, url_for
+from flask import Blueprint, g, render_template, make_response, request, url_for
+import os
 from portal.auth import login_required
-from werkzeug import secure_filename
 from . import db, __init__
 
 bp = Blueprint('my_assignments',__name__)
@@ -75,14 +75,16 @@ def assignment_description(id):
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
+    elif request.method == 'POST':
+        file = request.files['file']
+        file.save(os.path.join("portal/uploads", file.filename))
+        message = "file successfully uploaded"
+        file = "file"
+        return render_template("assignment_description.html", assignment_desc=assignment_desc, file=file, message=message)
+
     elif assignment_desc[4] == "file":
         file = 'hey'
         return render_template('assignment_description.html', assignment_desc=assignment_desc, file=file)
 
-    elif request.method == 'POST':
-        file = request.files['file']
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for(b'/uploads/{filename }', filename=filename))
 
     return render_template('assignment_description.html', assignment_desc=assignment_desc)

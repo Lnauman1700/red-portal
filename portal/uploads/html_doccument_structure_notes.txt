@@ -1,0 +1,12 @@
+Doccument Structure in HTML
+
+Structural Elements = 
+inline elements = Describe small portions of content *dont cause new line*
+block level elements = Describes sections *will be on seperate line from whats before and after it*
+
+Code Convention:
+Inline Elements stay on the same line
+Block Level Elements get new lines
+Child Block Level Elements are indented from their parents
+Sections, or similar sibling elements, are separated by extra new lines
+
