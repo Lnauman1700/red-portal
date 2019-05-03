@@ -31,33 +31,30 @@ def gradebook_view(id):
 
     with db.get_db() as conn:
         with conn.cursor() as cur:
-            # cur.execute("""
-            # SELECT *
-            # FROM users
-            # JOIN users_sessions ON users.id = users_sessions.student
-            # JOIN sessions ON users_sessions.session = sessions.session_id
-            # JOIN assignments ON assignments.session_id = sessions.session_id
-            # JOIN submissions ON submissions.assignment_id = assignments.assignment_id
-            # WHERE sessions.session_id = %s""", (id,))
-            # grade_info = cur.fetchall()
-            cur.execute("""
-            SELECT submissions.points, assignments.total_points, sessions.session_id FROM submissions
-            JOIN assignments ON assignments.assignment_id = submissions.assignment_id
-            JOIN sessions ON sessions.session_id = assignments.session_id
-            WHERE submissions.student_id = %s;
-            """, ())
-            student_grades = cur.fetchall()
-
+            cur.execute('SELECT * FROM users_sessions WHERE session = %s', (id,))
+            students_in_session = cur.fetchall()
+    grades_list = []
     with db.get_db() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-            SELECT submissions.points, assignments.total_points, sessions.session_id, users.email
-            FROM submissions
-            JOIN assignments ON assignments.assignment_id = submissions.assignment_id
-            JOIN sessions ON sessions.session_id = assignments.session_id
-            JOIN users ON users.id = submissions.student_id
-            WHERE submissions.student_id = %s;""",())
+            for students in students_in_session:
+                cur.execute("""
+                SELECT submissions.points, assignments.total_points, sessions.session_id, users.email
+                FROM submissions
+                JOIN assignments ON assignments.assignment_id = submissions.assignment_id
+                JOIN sessions ON sessions.session_id = assignments.session_id
+                JOIN users ON users.id = submissions.student_id
+                WHERE submissions.student_id = %s AND sessions.session_id = %s;""",(students[0], id))
+                grade_info = cur.fetchall()
+                # get total up every grade in grade_info
+                points_earned = 0
+                points_total = 0
+                for grade in grade_info:
+                    points_earned += grade[0]
+                    points_total += grade[1]
+                final_grade  = "{0:.0%}".format((points_earned/points_total))
+                grades_list.append([grade_info[0][3], final_grade])
 
-    table_header =  ["Student", "Grade"]
 
-    return render_template('teacher_gradebook_view.html', grade_info=grade_info, table_header=table_header)
+        table_header =  ["Student", "Grade"]
+
+    return render_template('teacher_gradebook_view.html', grades_list=grades_list, table_header=table_header)

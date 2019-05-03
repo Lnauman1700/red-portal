@@ -10,10 +10,10 @@
       <th class="pretty_Table ">{{item}}</th>
       {% endfor %}
     </tr>
-    {% for item in grade_info %}
+    {% for item in grades_list %}
     <tr>
+      <td class="pretty_Table_tborders">{{item[0]}}</td>
       <td class="pretty_Table_tborders">{{item[1]}}</td>
-      <td class="pretty_Table_tborders">{{item[15]}}</td>
     </tr>
     {% endfor %}
   </table>
