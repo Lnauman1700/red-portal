@@ -1,0 +1,19 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Grade Book{% endblock %}
+
+{% block content %}
+<article class="pretty_Table">
+  <table>
+    <tr>
+      <th class="pretty_Table ">{{table_header[0]}}</th>
+    </tr>
+    {% for item in sess_info %}
+    <tr>
+      <td class="pretty_Table_tborders"><a href="/gradebook/{{item[0]}}" >{{item[1]}} {{item[2]}} - {{item[3]}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</article>
+
+{% endblock %}

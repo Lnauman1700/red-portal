@@ -43,7 +43,14 @@ def create_app(test_config=None):
 
     from . import add_grades
     app.register_blueprint(add_grades.bp)
+    
     from . import my_assignments
     app.register_blueprint(my_assignments.bp)
+
+    from . import teacher_gradebook
+    app.register_blueprint(teacher_gradebook.bp)
+
+    #This is code in order for students to be able to view a list of their assignments.
+
 
     return app

@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Grades{% endblock %}
+
+{% block content %}
+<article class="pretty_Table">
+  <table>
+    <tr>
+      {% for item in table_header %}
+      <th class="pretty_Table ">{{item}}</th>
+      {% endfor %}
+    </tr>
+    {% for item in grades_list %}
+    <tr>
+      <td class="pretty_Table_tborders">{{item[0]}}</td>
+      <td class="pretty_Table_tborders">{{item[1]}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</article>
+
+{% endblock %}
