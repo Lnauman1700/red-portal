@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, make_response, request, url_for
 import os
 from portal.auth import login_required
-from . import db, __init__
+from . import db
 
 bp = Blueprint('my_assignments',__name__)
 
