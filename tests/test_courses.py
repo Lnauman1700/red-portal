@@ -29,6 +29,14 @@ def test_create_course_validation(client, auth):
         })
         assert b'<p>Course Number and Course fields required</p>' in response.data
 
+        # for course number that already exists
+        response = client.post('/courses', data={
+            'course': 'h',
+            'course_number': 'CSET 155',
+            'info': 'h',
+        })
+        assert b'Course number already exists' in response.data
+
 
 def test_course_update_route(client, auth):
     with client:
@@ -37,6 +45,21 @@ def test_course_update_route(client, auth):
         assert 200 == response.status_code
         assert b'<h1>Update CSET 155</h1>' in response.data
         assert b"<form method='POST'>" in response.data
+
+        response = client.get('/courses/10000000')
+        assert 404 == response.status_code
+        assert b'Page not found' in response.data
+
+        auth.login('teacher3@stevenscollege.edu', 't')
+        response = client.get('/courses/1')
+        assert 401 == response.status_code
+        assert b'You are not permitted to view this page' in response.data
+    with client:
+        auth.login('student@stevenscollege.edu', 'asdfgh')
+        response = client.get('/courses/1')
+        assert 401 == response.status_code
+        assert b'You are not permitted to view this page' in response.data
+
     # test going to courses/1 works, displays anything that might be unique to that course on the webpage
 
 def test_course_update(client, auth):
