@@ -75,29 +75,41 @@ def assignment_description(id):
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         file = request.files['file']
-        file.save(os.path.join("portal/uploads", file.filename))
-
-        with db.get_db() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM submissions WHERE assignment_id = %s AND student_id = %s", (id, g.user[0],))
-                submission = cur.fetchone()
-        if submission is None:
-            with db.get_db() as conn:
-                with conn.cursor() as cur:
-                    cur.execute("INSERT INTO submissions (assignment_id, student_id, filename) VALUES (%s, %s, %s)", (id, g.user[0], file.filename,))
+        if file.filename == '':
+            message = "Please put a file in"
+            submission_type = "file"
+            return render_template("assignment_description.html", assignment_desc=assignment_desc,submission_type=submission_type, message=message)
         else:
+            file.save(os.path.join("portal/uploads", file.filename))
+
             with db.get_db() as conn:
                 with conn.cursor() as cur:
-                    cur.execute("UPDATE submissions SET filename = %s WHERE assignment_id = %s AND student_id = %s", (file.filename, id, g.user[0],))
-        message = "file successfully uploaded"
-        file = "file"
-        return render_template("assignment_description.html", assignment_desc=assignment_desc, file=file, message=message)
+                    cur.execute("SELECT * FROM submissions WHERE assignment_id = %s AND student_id = %s", (id, g.user[0],))
+                    submission = cur.fetchone()
+
+            if submission is None:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("INSERT INTO submissions (assignment_id, student_id, filename) VALUES (%s, %s, %s)", (id, g.user[0], file.filename,))
+
+            elif submission[5] is None:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE submissions SET filename = %s WHERE assignment_id = %s AND student_id = %s", (file.filename, id, g.user[0],))
+            else:
+                message = "already submitted assignment"
+                submission_type = "file"
+                return render_template("assignment_description.html", assignment_desc=assignment_desc, submission_type=submission_type, message=message)
+
+            message = "file successfully uploaded"
+            submission_type = "file"
+            return render_template("assignment_description.html", assignment_desc=assignment_desc, submission_type=submission_type, message=message)
 
     elif assignment_desc[4] == "file":
-        file = 'hey'
-        return render_template('assignment_description.html', assignment_desc=assignment_desc, file=file)
+        submission_type = "file"
+        return render_template('assignment_description.html', assignment_desc=assignment_desc, submission_type=submission_type)
 
 
     return render_template('assignment_description.html', assignment_desc=assignment_desc)

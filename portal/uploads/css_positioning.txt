@@ -1,0 +1,7 @@
+CSS Positioning
+
+block = occupies any available width 
+inline = occupies only the width the content requires
+
+
+

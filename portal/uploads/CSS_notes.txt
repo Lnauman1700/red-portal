@@ -1,0 +1,26 @@
+CSS notes:]
+
+part of the web dev trinity (html, css, javascript)
+
+csszengarden.com = shows the power of css (with the same html)
+
+**always use external Stylesheets**
+
+Terminology:::::
+
+Stylesheets = seperate doc for CSS coding relative to HTML in the same directory
+Selector = Pattern at the start of a doccument
+
+Anatomy of a Ruleset:
+
+P{ <---selector
+  Color: Red;
+}    /\
+    decleration
+
+**you can do multiple Selectors and Declerations**
+
+
+CSS Layout:
+
+

@@ -1,0 +1,105 @@
+****160****
+
+
+                        $$$$ python $$$$
+
+Data Types {
+  list, string, integer, float, boolean, dictionary, function, class/object, none, tuple
+}
+
+Imports {
+  module: a file ```import my-module```,
+  package: more mobile collection of files ```from my-package     import my-module```
+}
+
+Control Flow {
+  if, elif, else, while, for, break
+}
+
+posted by zach:
+# Python
+- Data types:
+  - Scalar: None, Integer, Float, String, Boolean
+  - Compound: Function, List, Tuple, Dictionary, Class, Object
+- Import:
+  - Modules vs Packages
+  - from x import y vs import x
+- Control Flow:
+  - if/elif/else logic
+  - while vs for loops, and break
+  - operators like in, and, or, not, ==, <, >
+  - try/except
+
+                        $$$$ Flask $$$$
+
+Project Structure {
+  root/                 < root
+    -projects/          < package
+      -__init__.py
+      -auth.py          < module
+      -templates/
+          -index.html
+      -setup.py
+      -README
+      -tests/
+        -conftest.py    < configure tests
+      -venv/
+
+static: for static files like css
+template: dealing with variables (jinja)
+}
+
+
+Flask specifics {
+  @app.route('/endpoint', methods=[])
+
+  methods: GET, POST, HEAD, PUT, PATCH, DELETE,
+
+  request: flask.pocoo.org/docs/1.0/tutorial/templates
+
+  1)  request line    ```GET /docs/1.0/tutorial/templates HTTP 1.1
+  2)  headers         ```Host: flask.pocoo.org
+  3)  empty line      ```
+  4)  message
+
+header examples - cookies: , content-language: , media-type:
+
+More request examples: with form containing 2 inputs 'apple', 'orange'
+
+```POST /docs/1.0/tutorial/templates HTTP 1.1
+```Host: flask.pocoo.org
+```
+```one: apple
+   two: orange
+
+HTML input types: text, submit, radio, checkbox, password,
+
+levels of status codes: 100-500
+}
+
+posted by zach:
+# Flask
+- project structure
+
+- views vs templates (View is function that handles route *below route* template is what is returned 'render template')
+
+- blueprints and modular code
+
+- requests and responses (including methods, headers, and status codes)
+- test driven development (found in flask boilerplate)
+- making the project installable with virtual environments and dependencies
+- psycopg and SQL adapters
+
+
+server: machine is the hardware server, that runs server software
+application: aceses web server
+
+
+
+
+***170***
+
+symetric encryption: one code to keep track of (phone password)
+asymetric encryption: public thing encrypts, private decrypts
+
+hash: passwords ```echo -n "hello" | openssl dgst -sha256```

@@ -1,0 +1,12 @@
+NEEDS to run app in development mode:
+ -local dependencies
+ -code
+ -database connection
+
+
+create wsgi file:
+```from . import create_app
+    cr
+
+create procfile:
+``` web: gunicorn flask_todo.wsgi```

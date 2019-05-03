@@ -20,8 +20,12 @@ VALUES ('A', '2:00 - 4:20 MF', 1),
 INSERT INTO users_sessions (student, session)
 VALUES (2, 2),
        (5, 2),
+       (2, 1),
        (2, 3);
 
 INSERT INTO assignments (session_id, assignment_name, assignment_info, total_points)
 VALUES (1,'Delete Database', 'Work with postgres SQL', 100),
        (2,'Delete Database', 'Work with postgres SQL', 100);
+
+INSERT INTO submissions (assignment_id, student_id, points, letter)
+VALUES (1,2,100,'A');

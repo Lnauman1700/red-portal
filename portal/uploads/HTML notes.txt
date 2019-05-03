@@ -1,0 +1,25 @@
+HTML stand for: Hyper Text Markup Language
+
+Vocab:
+
+Semantics: Describing meaning for data
+HTML5: Newest version of the spec
+Tags: Create the elements *displays in source-code*
+Element: Things that end up rendered
+DOM: Document outline model, outline of elements rendered on screen
+Node: Items shown in the DOM
+Nesting Elements: Wrapping content with a tag creates meaning whereas wrapping tags provides organization.
+
+
+Parts of a HTML writeup:
+
+ *every site needs to declare its type first EX"<!DOCTYPE html>"*
+
+-
+
+Anatomy of an HTML element:
+
+<p class="nice">Hello World</p>
+ [_____________]   /\        /\
+   opening tag   enclosed   closing tag
+   *attribute*     text  
