@@ -27,26 +27,23 @@ def create_app(test_config=None):
     from . import sessions
     app.register_blueprint(sessions.bp)
 
-
-
     @app.route('/home')
     @login_required
     def home():
         return render_template('home.html', user=g.user[1])
 
-    # Importing 'my_courses' Blueprint which is the module rendering 'my_courses' page
     from . import my_courses
     app.register_blueprint(my_courses.bp)
 
     from . import courses
     app.register_blueprint(courses.bp)
 
-
     from . import assignments
     app.register_blueprint(assignments.bp)
 
     from . import add_grades
     app.register_blueprint(add_grades.bp)
+    
     from . import my_assignments
     app.register_blueprint(my_assignments.bp)
 
@@ -54,5 +51,6 @@ def create_app(test_config=None):
     app.register_blueprint(teacher_gradebook.bp)
 
     #This is code in order for students to be able to view a list of their assignments.
+
 
     return app

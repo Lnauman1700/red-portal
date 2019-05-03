@@ -61,6 +61,23 @@ def assignments():
             cur.execute("INSERT INTO assignments (session_id, assignment_name, assignment_info, assignment_type, total_points) VALUES (%s,%s,%s,%s,%s)", (sess_id, assignment_name, info, assignment_type, total_points))
             conn.commit()
             cur.close()
+
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT assignment_id FROM assignments ORDER BY assignment_id DESC")
+                    recent_assignment_id = cur.fetchone()
+
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                    SELECT users_sessions.student, assignments.assignment_id FROM assignments
+                    JOIN sessions ON assignments.session_id = sessions.session_id
+                    JOIN users_sessions ON users_sessions.session = sessions.session_id
+                    WHERE assignments.assignment_id = %s;
+                    """, (recent_assignment_id,))
+                    students_submission_data = cur.fetchall()
+                    for student in students_submission_data:
+                        cur.execute("INSERT INTO submissions (student_id, assignment_id) VALUES (%s, %s)", (student[0], student[1],))
             return redirect(url_for('.assignments'))
 
     return render_template('assignments.html', message=message, assign=assign, sessions=sessions)
@@ -98,7 +115,8 @@ def assignment_update(id):
                 assignments.assignment_info,
                 courses.teacher_id,
                 courses.course_number,
-                sessions.letter
+                sessions.letter,
+                assignments.total_points
         FROM courses
         JOIN users ON courses.teacher_id = users.id
         JOIN sessions ON courses.course_id = sessions.course_id

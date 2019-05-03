@@ -1,4 +1,5 @@
-from flask import Blueprint, g, render_template, make_response
+from flask import Blueprint, g, render_template, make_response, request, url_for
+import os
 from portal.auth import login_required
 from . import db
 
@@ -29,7 +30,7 @@ def my_assignments(id):
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
-    #join grades table to display grades for specific assignments 
+    #join grades table to display grades for specific assignments
     with db.get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM assignments WHERE session_id = %s", (course_info[3],))
@@ -48,7 +49,7 @@ def my_assignments(id):
     return render_template('my_assignments.html', course_info=course_info, table_headers=table_headers, assign_info=assign_info)
 
 
-@bp.route('/my_assignments/assignment_description/<int:id>')
+@bp.route('/my_assignments/assignment_description/<int:id>', methods = ['GET', 'POST'])
 @login_required
 def assignment_description(id):
 
@@ -61,21 +62,54 @@ def assignment_description(id):
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
-
     with db.get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM users_sessions WHERE student = %s AND session = %s", (g.user[0], assignment_desc[1],))
             auth = cur.fetchone()
 
-
     if g.user[3] == 'teacher':
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
 
-
     elif auth == None:
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
+
+    if request.method == 'POST':
+        file = request.files['file']
+        if file.filename == '':
+            message = "Please put a file in"
+            submission_type = "file"
+            return render_template("assignment_description.html", assignment_desc=assignment_desc,submission_type=submission_type, message=message)
+        else:
+            file.save(os.path.join("portal/uploads", file.filename))
+
+            with db.get_db() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM submissions WHERE assignment_id = %s AND student_id = %s", (id, g.user[0],))
+                    submission = cur.fetchone()
+
+            if submission is None:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("INSERT INTO submissions (assignment_id, student_id, filename) VALUES (%s, %s, %s)", (id, g.user[0], file.filename,))
+
+            elif submission[5] is None:
+                with db.get_db() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE submissions SET filename = %s WHERE assignment_id = %s AND student_id = %s", (file.filename, id, g.user[0],))
+            else:
+                message = "already submitted assignment"
+                submission_type = "file"
+                return render_template("assignment_description.html", assignment_desc=assignment_desc, submission_type=submission_type, message=message)
+
+            message = "file successfully uploaded"
+            submission_type = "file"
+            return render_template("assignment_description.html", assignment_desc=assignment_desc, submission_type=submission_type, message=message)
+
+    elif assignment_desc[4] == "file":
+        submission_type = "file"
+        return render_template('assignment_description.html', assignment_desc=assignment_desc, submission_type=submission_type)
 
 
     return render_template('assignment_description.html', assignment_desc=assignment_desc)
