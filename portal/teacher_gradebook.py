@@ -7,7 +7,7 @@ bp = Blueprint('gradebook',__name__)
 @bp.route('/gradebook')
 @login_required
 def gradebook():
-        
+
     if g.user[3] != 'teacher':
         message = 'You are not permitted to view this page'
         return make_response(render_template('error_page.html', message=message), 401)
@@ -70,8 +70,7 @@ def gradebook_view(id):
                 points_earned = 0
                 points_total = 0
                 for grade in grade_info:
-                        print(grade)
-                        if grade[0]:
+                        if grade[0] or grade[0] == 0:
                                 points_earned += grade[0]
                                 points_total += grade[1]
                 if points_total == 0:
