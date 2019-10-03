@@ -56,3 +56,20 @@ If you want to run tests, you'll have to create a second database according to t
 ```
 
 The first command will run the test functions defined in the `tests/` directory. The second gives a more detailed output. Run the third command to generate a report of the code covered by the tests. You can view this report in the terminal with `coverage report` or with more detail in the browser with `coverage html`.
+
+
+## Creating a User
+
+creating a user is done by running the command:
+
+```bash
+(venv) $ flask create-user
+```
+
+3 separate inputs will now show up, one after another.
+
+The first input is Email<br>
+The second input is Password<br>
+The third input is Role. The two possible roles are teacher and student, all in lowercase. No other input is accepted.
+
+Note that the database must already have been initialized for this process to work.
